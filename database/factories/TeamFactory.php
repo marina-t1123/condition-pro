@@ -20,8 +20,12 @@ class TeamFactory extends Factory
     public function definition(): array
     {
         return [
-            'team_name' => fake()->name(),
-            'memo' => fake()->realText(30),
+            // 'team_name' => fake()->name(),
+            // 'memo' => fake()->realText(30),
+            // 'created_at' => Carbon::now(),
+            // 'updated_at' => Carbon::now()
+            'team_name' => Str::random(10),
+            'memo' => Str::random(30),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ];
