@@ -42,7 +42,7 @@ export const Header = () => {
     return (
         <HStack width="100%" justifyContent="space-between" alignItems="center" padding="0 20px">
             {/* ロゴ */}
-            <Image width={'150px'} src="/img/logo.png" />
+            <Image width={'150px'} src="img/logo.png" />
 
             {/* メニュー */}
             <Box className='menu'>
