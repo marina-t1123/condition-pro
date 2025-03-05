@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('teams', function (Blueprint $table) {
+        Schema::create('m_events', function (Blueprint $table) {
             $table->id();
-            $table->string('team_name')->comment('チーム名');
-            $table->string('memo')->comment('メモ')->nullable();
+            $table->string('event_name')->comment('種目名');
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('teams');
+        Schema::dropIfExists('m_events');
     }
 };

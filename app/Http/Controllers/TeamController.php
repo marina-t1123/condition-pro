@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Team;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,16 @@ class TeamController extends Controller
     public function index()
     {
         // dd('表示のアクションに入っている');
-        return Inertia::render('Team/Index');
+
+        $teams = Team::all();
+        return Inertia::render('Team/Index', [
+            'teams' => $teams,
+        ]);
+    }
+
+    // 選手登録画面表示
+    public function create()
+    {
+        return Inertia::render('Team/Create');
     }
 }

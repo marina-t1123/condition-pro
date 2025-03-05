@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
 
         // Seederを使用する場合、ここでSeederクラスを読みこむ
         $this->call([
-            TeamSeeder::class
+            MEventSeeder::class
         ]);
     }
 }
