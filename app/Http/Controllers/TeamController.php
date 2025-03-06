@@ -30,4 +30,12 @@ class TeamController extends Controller
     {
         return Inertia::render('Team/Create');
     }
+
+    // 編集ページ表示
+    public function edit($m_event)
+    {
+        return Inertia::render('Team/Edit', [
+            'm_event' => $m_event,
+        ]);
+    }
 }

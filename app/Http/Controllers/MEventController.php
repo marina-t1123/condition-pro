@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMEventRequest;
+use App\Http\Requests\UpdateMEventRequest;
 use App\Models\MEvent;
 // use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,6 +39,29 @@ class MEventController extends Controller
 
         // 種目マスタ一覧画面のルーティングを指定して、リダイレクトさせる
         return redirect()->route('m_event.index')->with('success', '種目マスタを登録しました');
+    }
+
+    // 更新画面表示
+    public function edit($id)
+    {
+        $m_event = MEvent::findOrFail($id);
+
+        // dd($m_event);
+        return Inertia::render('MEvent/Edit', [
+            'm_event' => $m_event
+        ]);
+    }
+
+    // 更新処理
+    public function update(UpdateMEventRequest $request, string $id)
+    {
+        // dd('updateアクション処理開始');
+        $validatedData = $request->validated();
+
+        $m_event = MEvent::findOrFail($id);
+        $m_event->update($validatedData);
+
+        return redirect()->route('m_event.index')->with('success', '種目マスタを更新しました');
     }
 
 }

@@ -112,16 +112,11 @@ const MEvents = ({m_events}) => {
                                     <Table.Row key={index}>
                                         <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{m_event.event_name}</Table.Cell>
                                         <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                            <Link variant='plain' href=''>
+                                            <Link variant='plain' href={`/m_events/edit/${m_event.id}`}>
                                                 <Center>
                                                     <Image src="img/edit.png" />
                                                 </Center>
                                             </Link>
-                                            {/* <Box colorInterpolation='gray'>
-                                                <Button as={Link} href={``} bg='gray.300' color='white' size='lg'>
-                                                    一覧
-                                                </Button>
-                                            </Box> */}
                                         </Table.Cell>
                                         <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
                                             <Link variant='plain' href=''>

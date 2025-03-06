@@ -7,21 +7,10 @@ import {
     defaultSystem,
     Text,
     Box,
-    Table,
-    TableRoot,
-    Image,
     HStack,
-    StackSeparator,
-    // Link,
     Button,
-    Center,
     Input,
-    NativeSelect,
-    NativeSelectRoot,
-    NativeSelectField,
-    VStack,
     Stack,
-    Card
 } from '@chakra-ui/react';
 
 
@@ -54,6 +43,7 @@ const Create = () => {
 
         // Inertia.jsのrouterオブジェクトのpostメソッドを使用して、Laravelのルーティング(web.phpで該当するURI)に対して、フォームで入力された値(state)を渡して、Laravel側でのstoreアクションを実行する
         router.post('/m_events/store', data);
+        console.log(errors);
     }
 
     return (
@@ -73,14 +63,15 @@ const Create = () => {
                         <Stack gap="4" w="full">
                             <Text>種目名</Text>
                             <Input
-                                placeholder='種目名を入力してください'
+                                placeholder='必須入力です'
                                 type='text'
                                 id='event_name'
                                 name='event_name'
                                 value={data.event_name}
                                 onChange={handleChange}
                             />
-                            {errors.event_name && <Text color="red.500">{errors.event_name}</Text>}
+                            {/* {errors.event_name && <Text color="red.500">{errors.event_name}</Text>} */}
+                            <Text color="red.500">{errors.event_name}</Text>
                         </Stack>
                         <HStack display="flex" justifyContent="center" gap="4" p="0.5rem" m='6'>
                             <Button as={Link} href={`/m_events`} color='white' bg='gray.500' size='lg' p='5' width='30%'>戻る</Button>
