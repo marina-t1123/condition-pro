@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useForm, router } from '@inertiajs/react';
+import { Link, useForm, router, usePage } from '@inertiajs/react';
 // import { Link, router } from '@inertiajs/react';
 import CustomHeader from '@/Layouts/CustomHeader';
 import {
