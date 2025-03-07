@@ -1,6 +1,6 @@
 import React from 'react';
 import CustomHeader from '@/Layouts/CustomHeader';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     ChakraProvider,
     defaultSystem,
@@ -16,14 +16,9 @@ import {
     NativeSelectRoot,
     NativeSelectField,
     VStack,
-    Stack
+    Stack,
+    Alert
 } from '@chakra-ui/react';
-import {
-    MenuContent,
-    MenuItem,
-    MenuRoot,
-    MenuTrigger,
-  } from "../../../../src/components/ui/menu";
 import {
     DialogActionTrigger,
     DialogBody,
@@ -37,8 +32,8 @@ import {
   } from "../../../../src/components/ui/dialog"
 import { Field } from '../../../../src/components/ui/field';
 
-
 const MEvents = ({m_events}) => {
+
     return (
         <ChakraProvider value={defaultSystem}>
         <>

@@ -38,7 +38,8 @@ class MEventController extends Controller
         MEvent::create($validated);
 
         // 種目マスタ一覧画面のルーティングを指定して、リダイレクトさせる
-        return redirect()->route('m_event.index')->with('success', '種目マスタを登録しました');
+        // return redirect()->route('m_event.index')->with('message', '種目マスタを登録しました');
+        return to_route('m_event.index')->with('message', '種目マスタを登録しました');
     }
 
     // 更新画面表示
@@ -61,7 +62,8 @@ class MEventController extends Controller
         $m_event = MEvent::findOrFail($id);
         $m_event->update($validatedData);
 
-        return redirect()->route('m_event.index')->with('success', '種目マスタを更新しました');
+        // return redirect()->route('m_event.index')->with('message', '種目マスタを更新しました');
+        return to_route('m_event.index')->with('message', '種目マスタを更新しました');
     }
 
 }
