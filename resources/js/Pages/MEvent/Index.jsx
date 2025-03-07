@@ -1,6 +1,6 @@
 import React from 'react';
 import CustomHeader from '@/Layouts/CustomHeader';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, useForm, usePage } from '@inertiajs/react';
 import {
     ChakraProvider,
     defaultSystem,
@@ -33,6 +33,18 @@ import {
 import { Field } from '../../../../src/components/ui/field';
 
 const MEvents = ({m_events}) => {
+
+    const form = useForm();
+    //　削除イベント処理
+    const handleDelete = (id, e) => {
+        console.log('削除処理');
+        console.log(id);
+        // 再レンダリング防止
+        e.preventDefault();
+
+        // form.delete(`/m_events/delete/${m_event.id}`);
+        form.delete(route('e_event.destroy', id));
+    }
 
     return (
         <ChakraProvider value={defaultSystem}>
@@ -114,11 +126,11 @@ const MEvents = ({m_events}) => {
                                             </Link>
                                         </Table.Cell>
                                         <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                            <Link variant='plain' href=''>
                                                 <Center>
-                                                    <Image src="img/delete.png" />
+                                                    <Button onClick={ (e) => handleDelete(m_event.id, e) }>
+                                                        <Image src="img/delete.png" />
+                                                    </Button>
                                                 </Center>
-                                            </Link>
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}

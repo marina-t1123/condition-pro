@@ -45,6 +45,7 @@ Route::middleware('auth')
         Route::post('/store', [MEventController::class, 'store'])->name('m_event.store');
         Route::get('/edit/{id}', [MEventController::class, 'edit'])->name('m_event.edit');
         Route::put('/edit/{id}', [MEventController::class, 'update'])->name('e_event.update');
+        Route::delete('/delete/{id}', [MEventController::class, 'destroy'])->name('e_event.destroy');
     });
 
 require __DIR__.'/auth.php';
