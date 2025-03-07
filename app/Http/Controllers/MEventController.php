@@ -35,11 +35,13 @@ class MEventController extends Controller
         $validated = $request->validated();
 
         // バリデーション済みの入力データを使用して、新しい種目マスタモデルをインスタンス化する
-        MEvent::create($validated);
+        $m_event = MEvent::create($validated);
+
+        // 種目名を取得
+        $event_name = $m_event->event_name;
 
         // 種目マスタ一覧画面のルーティングを指定して、リダイレクトさせる
-        // return redirect()->route('m_event.index')->with('message', '種目マスタを登録しました');
-        return to_route('m_event.index')->with('message', '種目マスタを登録しました');
+        return to_route('m_event.index')->with('message', '種目マスタ【 '.$event_name.' 】を登録しました');
     }
 
     // 更新画面表示
@@ -63,7 +65,29 @@ class MEventController extends Controller
         $m_event->update($validatedData);
 
         // return redirect()->route('m_event.index')->with('message', '種目マスタを更新しました');
-        return to_route('m_event.index')->with('message', '種目マスタを更新しました');
+        return to_route('m_event.index')->with('message', '種目マスタ【 '.$m_event->event_name.' 】を更新しました');
+    }
+
+    // 削除処理
+    public function destroy(string $id)
+    {
+        // 削除対象の種目マスタを取得
+        $m_event = MEvent::findOrFail($id);
+
+        // 削除する種目マスタの種目名を取得する
+        $delete_event_name = $m_event->event_name;
+
+        // 種目マスタに紐ずくチームの有無
+
+        // チームに紐ずく選手の有無
+
+        // 選手に紐ずく傷病情報の有無
+
+        // マスタに紐ずくチーム・選手・傷病情報がなかった場合、削除を実施
+        $m_event->delete();
+
+        // リダイレクト処理
+        return redirect()->route('m_event.index')->with('message', '種目名【 '.$delete_event_name.' 】を削除しました');
     }
 
 }
