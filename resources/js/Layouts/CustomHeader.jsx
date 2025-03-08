@@ -41,29 +41,29 @@ export const Header = () => {
                         <MenuRoot>
                             <MenuTrigger asChild>
                                 <Button size='sm' variant="outline">
-                                    マスタメニュー
+                                    マスタ
                                 </Button>
                             </MenuTrigger>
                             <MenuContent>
-                                <MenuItem asChild>
+                                <MenuItem asChild value="m_event">
                                     <a
-                                        href=""
+                                        href="/m_events"
                                         target="_blank"
                                         rel="noreferrer"
                                     >
                                         種目
                                     </a>
                                 </MenuItem>
-                                <MenuItem asChild>
+                                <MenuItem asChild value="m_event_position">
                                     <a
                                         href=""
                                         target="_blank"
                                         rel="noreferrer"
                                     >
-                                        カテゴリー
+                                        ポジション・階級
                                     </a>
                                 </MenuItem>
-                                <MenuItem asChild>
+                                <MenuItem asChild value="m_body_part">
                                     <a
                                         href=""
                                         target="_blank"
@@ -72,22 +72,13 @@ export const Header = () => {
                                         部位
                                     </a>
                                 </MenuItem>
-                                <MenuItem asChild>
+                                <MenuItem asChild value="m_injury_name">
                                     <a
                                         href=""
                                         target="_blank"
                                         rel="noreferrer"
                                     >
                                         傷病名
-                                    </a>
-                                </MenuItem>
-                                <MenuItem asChild>
-                                    <a
-                                        href=""
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        シュチュエーション
                                     </a>
                                 </MenuItem>
                             </MenuContent>

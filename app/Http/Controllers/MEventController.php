@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMEventRequest;
+use App\Http\Requests\SearchMEventRequest;
 use App\Http\Requests\UpdateMEventRequest;
 use App\Models\MEvent;
 // use Illuminate\Http\RedirectResponse;
@@ -12,9 +13,21 @@ use Inertia\Inertia;
 class MEventController extends Controller
 {
     // 種目マスタ一覧ページ表示
-    public function index()
+    public function index(SearchMEventRequest $request)
     {
-        $m_events = MEvent::all();
+        // キーワードの取得
+        $keyword = $request->input('event_name');
+
+        // テーブルに対して、クエリを作成
+        $query = MEvent::query();
+
+        // もし、検索キーワードがあった場合
+        if(!empty($keyword)) {
+            // dd('キーワード処理');
+            $query->where('event_name', "{$keyword}");
+        }
+
+        $m_events = $query->get();
 
         return Inertia::render('MEvent/Index', [
             'm_events' => $m_events,
@@ -30,7 +43,6 @@ class MEventController extends Controller
     // 登録処理
     public function store(StoreMEventRequest $request)
     {
-        // dd('storeメソッド実行されている');
         // バリデーション済みのデータを取得
         $validated = $request->validated();
 
@@ -49,7 +61,6 @@ class MEventController extends Controller
     {
         $m_event = MEvent::findOrFail($id);
 
-        // dd($m_event);
         return Inertia::render('MEvent/Edit', [
             'm_event' => $m_event
         ]);
@@ -58,13 +69,11 @@ class MEventController extends Controller
     // 更新処理
     public function update(UpdateMEventRequest $request, string $id)
     {
-        // dd('updateアクション処理開始');
         $validatedData = $request->validated();
 
         $m_event = MEvent::findOrFail($id);
         $m_event->update($validatedData);
 
-        // return redirect()->route('m_event.index')->with('message', '種目マスタを更新しました');
         return to_route('m_event.index')->with('message', '種目マスタ【 '.$m_event->event_name.' 】を更新しました');
     }
 
