@@ -1,6 +1,6 @@
 import React from 'react';
 import CustomHeader from '@/Layouts/CustomHeader';
-import { Link, useForm, usePage } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import {
     ChakraProvider,
     defaultSystem,
@@ -9,22 +9,15 @@ import {
     Table,
     Image,
     HStack,
-    StackSeparator,
     Button,
     Center,
     Input,
-    NativeSelectRoot,
-    NativeSelectField,
-    VStack,
     Stack,
-    Alert
 } from '@chakra-ui/react';
 import {
-    DialogActionTrigger,
     DialogBody,
     DialogCloseTrigger,
     DialogContent,
-    DialogFooter,
     DialogHeader,
     DialogRoot,
     DialogTitle,
@@ -34,8 +27,9 @@ import { Field } from '../../../../src/components/ui/field';
 
 const MEvents = ({m_events}) => {
 
-    // InertiaのuseFormを使用してフォームデータの状態(State)を管理
-    const {data, setData, get, delete:destroy} = useForm({
+    // InertiaのuseFormを使用してフォーム関連の処理を実施
+    // useFormのdelete関数が、JavaScriptの予約後となってしまうので、リネームをして別の変数名を割り当てるようにする。
+    const {data, setData, get, delete:destroy } = useForm({
         event_name: ''
     });
 
@@ -66,7 +60,6 @@ const MEvents = ({m_events}) => {
         // 再レンダリング防止
         e.preventDefault();
 
-        // form.delete(`/m_events/delete/${m_event.id}`);
         destroy(route('m_event.destroy', id));
     }
 

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useForm, router } from '@inertiajs/react';
-// import { Link, router } from '@inertiajs/react';
 import CustomHeader from '@/Layouts/CustomHeader';
 import {
     ChakraProvider,
@@ -15,11 +14,6 @@ import {
 
 
 const Create = () => {
-
-    // //　フォームから送信された値のstate(コンポーネント内のフォームのリクエストパラメータ[state]を管理するためのhooks)
-    // const [formData, setFormData] = useState({
-    //     m_event_name: '',
-    // });
 
     // InertiaのuseFormを使用してフォームデータの状態(State)を管理
     const { data, setData, post, processing, errors } = useForm({
@@ -48,7 +42,7 @@ const Create = () => {
 
     return (
         <ChakraProvider value={defaultSystem}>
-        {/* <> */}
+        <>
             <CustomHeader />
 
             {/* メイン */}
@@ -81,38 +75,7 @@ const Create = () => {
                 </Box>
             </Box>
 
-            {/* <Box className='main' width="80%" m="auto" bg='white' marginTop='20px' boxShadow='md'>
-                <Card.Root maxW="md" m='auto'>
-                    <Card.Header m="auto">
-                        <Card.Title fontSize='25px'>種目マスタ登録フォーム</Card.Title>
-                        <Card.Description>
-                            新しく種目マスタ情報を登録します。
-                        </Card.Description>
-                    </Card.Header>
-                    <Card.Body>
-                        <form onSubmit={handleSubmit}>
-                            <Stack gap="4" w="full">
-                                <Text>種目名</Text>
-                                <Input
-                                    placeholder='種目名を入力してください'
-                                    type='text'
-                                    id='event_name'
-                                    name='event_name'
-                                    value={data.event_name}
-                                    onChange={handleChange}
-                                />
-                                {errors.event_name && <Text>{errors.event_name}</Text>}
-                            </Stack>
-                            <HStack display="flex" justifyContent="center" gap="4" p="0.5rem" m='6'>
-                                <Button as={Link} href={`/m_events`} color='white' bg='gray.500' size='lg' p='5' width='30%'>戻る</Button>
-                                <Button type='submit' color='white' bg='orange.500' size='lg' p='5' width='30%'>登録</Button>
-                            </HStack>
-                        </form>
-                    </Card.Body>
-                </Card.Root>
-            </Box> */}
-
-        {/* </> */}
+        </>
         </ChakraProvider>
     );
 }
