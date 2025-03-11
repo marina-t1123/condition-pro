@@ -54,8 +54,8 @@ Route::middleware('auth')
         Route::get('/', [MEventPositionController::class, 'index'])->name('m_event_position.index');
         Route::get('/create', [MEventPositionController::class, 'create'])->name('m_event_position.create');
         Route::post('/store', [MEventPositionController::class, 'store'])->name('m_event_position.store');
-        // Route::get('/edit/{id}', [MEventPositionController::class, 'edit'])->name('m_event_position.edit');
-        // Route::put('/edit/{id}', [MEventPositionController::class, 'update'])->name('m_event_position.update');
+        Route::get('/edit/{id}', [MEventPositionController::class, 'edit'])->name('m_event_position.edit');
+        Route::put('/edit/{id}', [MEventPositionController::class, 'update'])->name('m_event_position.update');
         // Route::delete('/delete/{id}', [MEventPositionController::class, 'destroy'])->name('m_event_position.destroy');
 });
 

@@ -61,6 +61,12 @@ class MEventPositionController extends Controller
 
 
     // 種目ポジションマスタ編集ページ
+    public function edit($m_event_position)
+    {
+        return Inertia::render('MEventPositon/Edit', [
+            'm_event_position' => $m_event_position
+        ]);
+    }
 
     // 種目ポジションマスタ更新
 
