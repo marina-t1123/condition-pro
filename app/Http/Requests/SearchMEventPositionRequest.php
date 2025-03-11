@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreMEventRequest extends FormRequest
+class SearchMEventPositionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class StoreMEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'event_name' => 'required|string|max:255|unique:m_events'
+            'event_id' => 'integer|max:255|unique:m_events,id'
         ];
     }
 
@@ -34,7 +34,7 @@ class StoreMEventRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'event_name' => '種目名',
+            'event_id' => '種目マスタID',
         ];
     }
 }

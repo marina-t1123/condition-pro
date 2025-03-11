@@ -100,16 +100,11 @@ const MEvents = ({m_events}) => {
                                                     />
                                                 </Field>
                                             </Stack>
-
-                                        <Button type='submit' color='white' bg='orange.500' size='lg' p='5' width='30%' >検索</Button>
+                                            <Center m="6">
+                                                <Button type='submit' color='white' bg='orange.500' size='lg' p='5' width='30%' >検索</Button>
+                                            </Center>
                                         </form>
                                     </DialogBody>
-                                    {/* <DialogFooter> */}
-                                        {/* <DialogActionTrigger asChild>
-                                            <Button variant="outline" color='white' bg='gray.500' size='lg' p='5' width='30%'>閉じる</Button>
-                                        </DialogActionTrigger> */}
-
-                                    {/* </DialogFooter> */}
                                 <DialogCloseTrigger />
                             </DialogContent>
                         </DialogRoot>
@@ -119,13 +114,12 @@ const MEvents = ({m_events}) => {
 
                         {/* 登録フォーム */}
                         <Button as={Link} href={`/m_events/create`} bg='orange.400' p="0.5rem">
-                            種目マスタを登録する
+                            種目マスタ登録
                         </Button>
 
                     </HStack>
 
                     {/* テーブル */}
-                    {/* <Box w="90%" m="auto" marginBottom="10px" h="58vh" border="1px solid" borderColor="gray.200" p="1rem"> */}
                     <Table.ScrollArea w="90%" m="auto" marginY="2rem" h="70vh" border="1px solid" borderColor="gray.200" p="1rem">
                         <Table.Root>
                             <Table.Header position="sticky" top="0" zIndex="1" bg='gray.400'>
@@ -159,7 +153,6 @@ const MEvents = ({m_events}) => {
                             </Table.Body>
                         </Table.Root>
                     </Table.ScrollArea>
-                    {/* </Box> */}
 
                 </Box>
 

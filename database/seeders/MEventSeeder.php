@@ -14,19 +14,20 @@ class MEventSeeder extends Seeder
      */
     public function run(): void
     {
+        $now = Carbon::now();
         // 初期データ作成
         MEvent::create([
             'id' => 1,
             'event_name' => 'サッカー',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'created_at' => $now,
+            'updated_at' => $now
         ]);
 
         MEvent::create([
             'id' => 2,
-            'event_name' => 'ラグビー',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'event_name' => '陸上競技',
+            'created_at' => $now,
+            'updated_at' => $now
         ]);
     }
 }
