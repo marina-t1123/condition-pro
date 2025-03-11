@@ -80,7 +80,7 @@ const MEventPositions = ({m_event_positions, m_events}) => {
                                                 <Text w='20%' textAlign='center'>種目名</Text>
                                                 <NativeSelect.Root>
                                                     <NativeSelect.Field placeholder='種目を選択してください' value={data.event_id} name='event_id' onChange={handleChange}>
-                                                        {m_events.map((m_event, i) => <option value={m_event.id}>{m_event.event_name}</option>)}
+                                                        {m_events.map((m_event, i) => <option key={i} value={m_event.id}>{m_event.event_name}</option>)}
                                                     </NativeSelect.Field>
                                                 </NativeSelect.Root>
                                             </HStack>
@@ -119,7 +119,7 @@ const MEventPositions = ({m_event_positions, m_events}) => {
                                         <Table.Cell textAlign='center' borderBottom="1px solid" borderColor="gray.300">{m_event_position.m_event.event_name}</Table.Cell>
                                         <Table.Cell textAlign='center' borderBottom="1px solid" borderColor="gray.300">{m_event_position.event_position_name}</Table.Cell>
                                         <Table.Cell borderBottom="1px solid" borderColor="gray.300">
-                                            <Link variant='plain' >
+                                            <Link variant='plain' href={`/m_event_positions/edit/${m_event_position.id}`}>
                                                 <Center>
                                                     <Image src="img/edit.png" />
                                                 </Center>
