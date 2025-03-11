@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\MEventPosition;
+use App\Models\MEvent;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -22,7 +24,8 @@ class DatabaseSeeder extends Seeder
 
         // Seederを使用する場合、ここでSeederクラスを読みこむ
         $this->call([
-            MEventSeeder::class
+            MEventSeeder::class,
+            MEventPositionSeeder::class,
         ]);
     }
 }

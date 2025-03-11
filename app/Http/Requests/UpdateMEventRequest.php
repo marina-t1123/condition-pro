@@ -25,4 +25,16 @@ class UpdateMEventRequest extends FormRequest
             'event_name' => 'required|string|max:255|unique:m_events'
         ];
     }
+
+    /**
+     * バリデーションエラーのカスタム属性の取得
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'event_name' => '種目名',
+        ];
+    }
 }

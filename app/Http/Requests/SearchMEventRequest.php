@@ -25,4 +25,16 @@ class SearchMEventRequest extends FormRequest
             'event_name' => 'string|max:255'
         ];
     }
+
+    /**
+     * バリデーションエラーのカスタム属性の取得
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'event_name' => '種目名',
+        ];
+    }
 }
