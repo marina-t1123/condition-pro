@@ -96,5 +96,19 @@ class MEventPositionController extends Controller
 
 
     // 種目ポジションマスタ削除
+    public function destroy($id)
+    {
+
+        // 削除対象の種目ポジションマスタを取得
+        $m_event_position = MEventPosition::findOrFail($id);
+
+        $destroy_position_name = $m_event_position->event_position_name;
+        $m_event = $m_event_position->mEvent;
+
+        $m_event_position->delete();
+
+        // 一覧画面にリダイレクトする
+        return to_route('m_event_position.index')->with('message', '種目【'.$m_event->event_name.'】のポジション・階級【'.$destroy_position_name.'】を削除しました。');
+    }
 
 }
