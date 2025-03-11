@@ -57,7 +57,7 @@ const Edit = ({ m_event, m_event_position}) => {
                             value={data.event_position_name}
                             onChange={handleChange}
                         />
-                        {errors.event_position_name && <Text color="red.500">{errors.event_name}</Text>}
+                        {errors.event_position_name && <Text color="red.500">{errors.event_position_name}</Text>}
                     </Stack>
                     <HStack display="flex" justifyContent="center" gap="4" p="0.5rem" m='6'>
                         <Button as={Link} href={`/m_event_positions`} color="white" bg="gray.500" size="lg" p="5" width='30%'>戻る</Button>
