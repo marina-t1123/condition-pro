@@ -56,7 +56,7 @@ Route::middleware('auth')
         Route::post('/store', [MEventPositionController::class, 'store'])->name('m_event_position.store');
         Route::get('/edit/{id}', [MEventPositionController::class, 'edit'])->name('m_event_position.edit');
         Route::put('/edit/{id}', [MEventPositionController::class, 'update'])->name('m_event_position.update');
-        // Route::delete('/delete/{id}', [MEventPositionController::class, 'destroy'])->name('m_event_position.destroy');
+        Route::delete('/delete/{id}', [MEventPositionController::class, 'destroy'])->name('m_event_position.destroy');
 });
 
 require __DIR__.'/auth.php';

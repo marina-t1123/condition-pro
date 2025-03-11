@@ -32,7 +32,7 @@ import { Field } from '../../../../src/components/ui/field';
 const MEventPositions = ({m_event_positions, m_events}) => {
 
     // 検索フォームでuseFormの設定
-    const {data, setData, get} = useForm({
+    const {data, setData, get, delete:destroy} = useForm({
         'event_id': '', // フォームの入力値の初期値設定
     });
 
@@ -48,6 +48,14 @@ const MEventPositions = ({m_event_positions, m_events}) => {
         e.preventDefault();
 
         get(route('m_event_position.index'), {data})
+    }
+
+    const handleDelete = (id, e) => {
+        //レンダリング防止
+        e.preventDefault();
+        console.log(id);
+
+        destroy(route('m_event_position.destroy', id))
     }
 
     return (
@@ -126,11 +134,11 @@ const MEventPositions = ({m_event_positions, m_events}) => {
                                             </Link>
                                         </Table.Cell>
                                         <Table.Cell borderBottom="1px solid" borderColor="gray.300">
-                                            <Link variant='plain' >
-                                                <Center>
+                                            <Center>
+                                                <Button onClick={ (e) => handleDelete(m_event_position.id, e) }>
                                                     <Image src="img/delete.png" />
-                                                </Center>
-                                            </Link>
+                                                </Button>
+                                            </Center>
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}
