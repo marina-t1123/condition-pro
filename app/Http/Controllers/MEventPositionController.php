@@ -6,6 +6,7 @@ use App\Models\MEventPosition;
 use App\Models\MEvent;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreMEventPositionRequest;
+use App\Http\Requests\UpdateMEventPositionRequest;
 use Inertia\Inertia;
 
 class MEventPositionController extends Controller
@@ -61,8 +62,37 @@ class MEventPositionController extends Controller
 
 
     // 種目ポジションマスタ編集ページ
+    public function edit($id)
+    {
+        $m_event_position = MEventPosition::findOrFail($id);
+        $m_event = $m_event_position->mEvent;
+
+        return Inertia::render('MEventPosition/Edit', [
+            'm_event' => $m_event,
+            'm_event_position' => $m_event_position
+        ]);
+    }
 
     // 種目ポジションマスタ更新
+    public function update(UpdateMEventPositionRequest $request, $id)
+    {
+        // 対象のポジション・種目マスタを取得する
+        $m_event_position = MEventPosition::findOrFail($id);
+
+        // ポジションに紐づく種目マスタを取得
+        $m_event = $m_event_position->mEvent;
+
+        //バリデーション後の値を取得
+        $validated = $request->validated();
+
+        // 対象のポジション・階級マスタの名前を更新する
+        $m_event_position->update([
+            'event_position_name' => $validated['event_position_name']
+        ]);
+
+        // リダイレクト処理で一覧画面にリダイレクトさせる
+        return to_route('m_event_position.index')->with('message', '種目名【'.$m_event->event_name.'】のポジション・階級名【'.$m_event_position->event_position_name.'】を更新しました。');
+    }
 
 
     // 種目ポジションマスタ削除
