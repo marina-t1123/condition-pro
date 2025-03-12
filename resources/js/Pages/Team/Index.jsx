@@ -1,6 +1,6 @@
 import React from 'react';
 import CustomHeader from '@/Layouts/CustomHeader';
-import { Link } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import {
     ChakraProvider,
     defaultSystem,
@@ -19,17 +19,10 @@ import {
     Stack
 } from '@chakra-ui/react';
 import {
-    MenuContent,
-    MenuItem,
-    MenuRoot,
-    MenuTrigger,
-  } from "../../../../src/components/ui/menu";
-import {
     DialogActionTrigger,
     DialogBody,
     DialogCloseTrigger,
     DialogContent,
-    DialogFooter,
     DialogHeader,
     DialogRoot,
     DialogTitle,
@@ -38,110 +31,46 @@ import {
 import { Field } from '../../../../src/components/ui/field';
 
 
-const Teams = ({ teams }) => {
+const Teams = ({ teams, m_events, filters = {} }) => {
+    console.log(filters);
+
+    // フォーム関連が使用できるようにuseFormを設定
+    const {data, setData, get, post, errors } = useForm({
+        'team_name': filters?.team_name ||'',
+        'm_event_id': filters?.m_event_id || ''
+    });
+
+    // 検索フォームの入力データ保持
+    const handleChange = (e) => {
+        setData({...data, [e.target.name]: e.target.value});
+        console.log(data);
+    }
+
+    // 検索フォームの送信ボタンクリック時の処理
+    const handleSubmit = (e) => {
+        console.log('送信処理実施');
+        //再レンダリング防止
+        e.preventDefault();
+
+        get(route('team.index', {
+            team_name: data.team_name,
+            m_event_id: data.m_event_id
+        }));
+    }
+
+    // リセットボタンクリック時の処理
+    const handleReset = () => {
+
+        setData({
+            'team_name': '',
+            m_event_id: ''
+        });
+    }
+
     return (
         <ChakraProvider value={defaultSystem}>
         <>
             <CustomHeader />
-            {/* <HStack width="100%" justifyContent="space-between" alignItems="center" padding="0 20px"> */}
-                {/* ロゴ */}
-                {/* <Image width={'150px'} src="img/logo.png" /> */}
-
-                {/* メニュー */}
-                {/* <Box className='menu'>
-                    <HStack direction={{ base: "column", md: "row" }} gap="10" separator={<StackSeparator />}>
-                        <Link>チーム</Link>
-                        <Link>選手</Link>
-                        <Link>傷病情報</Link>
-                        <Link>グラフ</Link>
-                        <MenuRoot>
-                            <MenuTrigger asChild>
-                                <Button size='sm' variant="outline">
-                                    マスタメニュー
-                                </Button>
-                            </MenuTrigger>
-                            <MenuContent>
-                                <MenuItem asChild>
-                                    <a
-                                    　href=""
-                                    　target="_blank"
-                                    　rel="noreferrer"
-                                    >
-                                        種目
-                                    </a>
-                                </MenuItem>
-                                <MenuItem asChild>
-                                    <a
-                                    　href=""
-                                    　target="_blank"
-                                    　rel="noreferrer"
-                                    >
-                                        カテゴリー
-                                    </a>
-                                </MenuItem>
-                                <MenuItem asChild>
-                                    <a
-                                    　href=""
-                                    　target="_blank"
-                                    　rel="noreferrer"
-                                    >
-                                        部位
-                                    </a>
-                                </MenuItem>
-                                <MenuItem asChild>
-                                    <a
-                                    　href=""
-                                    　target="_blank"
-                                    　rel="noreferrer"
-                                    >
-                                        傷病名
-                                    </a>
-                                </MenuItem>
-                                <MenuItem asChild>
-                                    <a
-                                    　href=""
-                                    　target="_blank"
-                                    　rel="noreferrer"
-                                    >
-                                        シュチュエーション
-                                    </a>
-                                </MenuItem>
-                            </MenuContent>
-                        </MenuRoot>
-                    </HStack>
-                </Box> */}
-
-                {/* ユーザーメニュー */}
-                {/* <Box className='user_menu' marginRight='20px'>
-                <MenuRoot>
-                        <MenuTrigger asChild>
-                            <Button size='sm' variant="outline">
-                                ユーザーネーム
-                            </Button>
-                        </MenuTrigger>
-                        <MenuContent>
-                            <MenuItem asChild>
-                                <a
-                                　href=""
-                                　target="_blank"
-                                　rel="noreferrer"
-                                >
-                                    ユーザー情報
-                                </a>
-                            </MenuItem>
-                            <MenuItem asChild>
-                                <a
-                                　href=""
-                                　target="_blank"
-                                　rel="noreferrer"
-                                >
-                                    ログアウト
-                                </a>
-                            </MenuItem>
-                        </MenuContent>
-                    </MenuRoot>
-                </Box>
-            </HStack> */}
 
             {/* メイン */}
                 <Box className='main' width="90%" m="auto" bg='white' marginTop='20px' boxShadow='md' >
@@ -151,7 +80,7 @@ const Teams = ({ teams }) => {
                         {/* <Spacer /> */}
                         <DialogRoot>
                             <DialogTrigger asChild>
-                                <Button variant="outline" size="xxl" bg="gray.800" p='0.5rem'>
+                                <Button variant="outline" size="xxl" bg="gray.800" p='0.5rem' w="10%">
                                 検索
                                 </Button>
                             </DialogTrigger>
@@ -162,7 +91,7 @@ const Teams = ({ teams }) => {
                                         </Center>
                                     </DialogHeader>
                                     <DialogBody>
-                                        <form>
+                                        <form onSubmit={handleSubmit}>
                                             <Stack gap="4">
                                                 <Field label="チーム名">
                                                     <Input
@@ -170,78 +99,34 @@ const Teams = ({ teams }) => {
                                                         type='text'
                                                         id='team_name'
                                                         name='team_name'
-                                                        value={FormData.team_name}
+                                                        value={data.team_name}
+                                                        onChange={handleChange}
                                                     />
                                                 </Field>
+                                                {errors.team_name && <option>{errors.team_name}</option>}
                                                 <Field label="種目">
                                                     <NativeSelectRoot>
-                                                        <NativeSelectField placeholder='登録した種目マスタから選択してください'>
-                                                            <option value="1">サッカー</option>
-                                                            <option value="2">バスケ</option>
+                                                        <NativeSelectField placeholder='種目を選択してください' name='m_event_id' value={data.m_event_id} onChange={handleChange}>
+                                                            {m_events.map((m_event, i) => <option key={i} value={m_event.id}>{m_event.event_name}</option>)}
                                                         </NativeSelectField>
                                                     </NativeSelectRoot>
                                                 </Field>
+                                                {errors.m_event_id && <option>{errors.m_event_id}</option>}
                                             </Stack>
-                                            {/* <HStack marginY="1rem">
-                                                <Text>チーム名</Text>
-                                                <Input
-                                                    placeholder='チーム名を入力'
-                                                    size='lg'
-                                                    type='text'
-                                                    id='team_name'
-                                                    name='team_name'
-                                                    value={FormData.team_name}
-                                                />
-                                            </HStack>
-                                            <HStack>
-                                                <Text>種目</Text>
-                                                <NativeSelectRoot>
-                                                    <NativeSelectField placeholder='登録した種目マスタから選択してください'>
-                                                        <option value="1">サッカー</option>
-                                                        <option value="2">バスケ</option>
-                                                    </NativeSelectField>
-                                                </NativeSelectRoot>
-                                            </HStack> */}
-                                            {/* <Center>
-                                                <Button type='submit' color='white' bg='orange.500' size='lg' p='5' width='40%'>登録</Button>
-                                            </Center> */}
+                                            <Center>
+                                                <Button type='submit' color='white' bg='orange.500' size='lg' p='5' width='50%' mt='2rem'>検索</Button>
+                                            </Center>
                                         </form>
                                     </DialogBody>
-                                    <DialogFooter>
-                                        {/* <DialogActionTrigger asChild>
-                                            <Button variant="outline" color='white' bg='gray.500' size='lg' p='5' width='30%'>閉じる</Button>
-                                        </DialogActionTrigger> */}
-                                        <Button as={Link} href={`/teams`} color='white' bg='gray.500' size='lg' p='5' width='30%'>リセット</Button>
-                                        <Button type='submit' color='white' bg='orange.500' size='lg' p='5' width='30%'>登録</Button>
-                                    </DialogFooter>
                                 <DialogCloseTrigger />
                             </DialogContent>
                         </DialogRoot>
+                        <Button as={Link} href={`/teams`} color='white' bg='gray.500' p='5' onClick={handleReset}>リセット</Button>
                         <Button as={Link} href={`/teams/create`} bg='orange.400' p="1rem">
                             チームを登録する
                         </Button>
                     </HStack>
 
-                    {/* 検索フォーム */}
-                    {/* <Box width='40%' m='auto' marginY='2rem'>
-                        <form>
-                            <HStack>
-                                <Text>チーム名</Text>
-                                <Input
-                                    placeholder='チーム名を入力'
-                                    size='lg'
-                                    type='text'
-                                    id='team_name'
-                                    name='team_name'
-                                    value={FormData.team_name}
-                                />
-                            </HStack>
-                            <HStack spaceX='2rem' align='center'>
-                                <Button type='submit' color='white' bg='orange.500' size='lg' p='5'>検索</Button>
-                                <Button bg='gray.500' color='white' size='lg' p='5' >リセット</Button>
-                            </HStack>
-                        </form>
-                    </Box> */}
 
                     {/* テーブル */}
                     {/* <Box w="90%" m="auto" marginBottom="10px" h="58vh" border="1px solid" borderColor="gray.200" p="1rem"> */}
@@ -262,7 +147,7 @@ const Teams = ({ teams }) => {
                                 {teams.map((team, index) => (
                                     <Table.Row key={index}>
                                         <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{team.team_name}</Table.Cell>
-                                        <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">サッカー</Table.Cell>
+                                        <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{team.m_event.event_name}</Table.Cell>
                                         <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
                                             <Link variant='plain' href=''>
                                                 <Center>
