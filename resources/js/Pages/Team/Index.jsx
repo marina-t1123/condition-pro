@@ -9,17 +9,14 @@ import {
     Table,
     Image,
     HStack,
-    StackSeparator,
     Button,
     Center,
     Input,
     NativeSelectRoot,
     NativeSelectField,
-    VStack,
     Stack
 } from '@chakra-ui/react';
 import {
-    DialogActionTrigger,
     DialogBody,
     DialogCloseTrigger,
     DialogContent,
