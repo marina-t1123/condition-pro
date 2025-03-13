@@ -70,64 +70,62 @@ const Teams = ({ teams, m_events, filters = {} }) => {
             <CustomHeader />
 
             {/* メイン */}
-                <Box className='main' width="90%" m="auto" bg='white' marginTop='20px' boxShadow='md' >
-                    <HStack bg='gray.400' color='white'>
-                        <Text textStyle={'2xl'} m='20px'>チーム一覧</Text>
+            <Box className='main' width="90%" m="auto" bg='white' marginTop='20px' boxShadow='md' >
+                <HStack bg='gray.400' color='white'>
+                    <Text textStyle={'2xl'} m='20px'>チーム一覧</Text>
 
-                        {/* <Spacer /> */}
-                        <DialogRoot>
-                            <DialogTrigger asChild>
-                                <Button variant="outline" size="xxl" bg="gray.800" p='0.5rem' w="10%">
-                                検索
-                                </Button>
-                            </DialogTrigger>
-                                <DialogContent>
-                                    <DialogHeader>
+                    <DialogRoot>
+                        <DialogTrigger asChild>
+                            <Button variant="outline" size="xxl" bg="gray.800" p='0.5rem' w="10%">
+                            検索
+                            </Button>
+                        </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <Center>
+                                        <DialogTitle>チーム検索</DialogTitle>
+                                    </Center>
+                                </DialogHeader>
+                                <DialogBody>
+                                    <form onSubmit={handleSubmit}>
+                                        <Stack gap="4">
+                                            <Field label="チーム名">
+                                                <Input
+                                                    placeholder='チーム名を入力してください'
+                                                    type='text'
+                                                    id='team_name'
+                                                    name='team_name'
+                                                    value={data.team_name}
+                                                    onChange={handleChange}
+                                                />
+                                            </Field>
+                                            {errors.team_name && <Text color="red.500">{errors.team_name}</Text>}
+                                            <Field label="種目">
+                                                <NativeSelectRoot>
+                                                    <NativeSelectField placeholder='種目を選択してください' name='m_event_id' value={data.m_event_id} onChange={handleChange}>
+                                                        {m_events.map((m_event, i) => <option key={i} value={m_event.id}>{m_event.event_name}</option>)}
+                                                    </NativeSelectField>
+                                                </NativeSelectRoot>
+                                            </Field>
+                                            {errors.m_event_id && <Text color="red.500">{errors.m_event_id}</Text>}
+                                        </Stack>
                                         <Center>
-                                            <DialogTitle>チーム検索</DialogTitle>
+                                            <Button type='submit' color='white' bg='orange.500' size='lg' p='5' width='50%' mt='2rem'>検索</Button>
                                         </Center>
-                                    </DialogHeader>
-                                    <DialogBody>
-                                        <form onSubmit={handleSubmit}>
-                                            <Stack gap="4">
-                                                <Field label="チーム名">
-                                                    <Input
-                                                        placeholder='チーム名を入力してください'
-                                                        type='text'
-                                                        id='team_name'
-                                                        name='team_name'
-                                                        value={data.team_name}
-                                                        onChange={handleChange}
-                                                    />
-                                                </Field>
-                                                {errors.team_name && <option>{errors.team_name}</option>}
-                                                <Field label="種目">
-                                                    <NativeSelectRoot>
-                                                        <NativeSelectField placeholder='種目を選択してください' name='m_event_id' value={data.m_event_id} onChange={handleChange}>
-                                                            {m_events.map((m_event, i) => <option key={i} value={m_event.id}>{m_event.event_name}</option>)}
-                                                        </NativeSelectField>
-                                                    </NativeSelectRoot>
-                                                </Field>
-                                                {errors.m_event_id && <option>{errors.m_event_id}</option>}
-                                            </Stack>
-                                            <Center>
-                                                <Button type='submit' color='white' bg='orange.500' size='lg' p='5' width='50%' mt='2rem'>検索</Button>
-                                            </Center>
-                                        </form>
-                                    </DialogBody>
-                                <DialogCloseTrigger />
-                            </DialogContent>
-                        </DialogRoot>
-                        <Button as={Link} href={`/teams`} color='white' bg='gray.500' p='5' onClick={handleReset}>リセット</Button>
-                        <Button as={Link} href={`/teams/create`} bg='orange.400' p="1rem">
-                            チームを登録する
-                        </Button>
-                    </HStack>
+                                    </form>
+                                </DialogBody>
+                            <DialogCloseTrigger />
+                        </DialogContent>
+                    </DialogRoot>
+                    <Button as={Link} href={`/teams`} color='white' bg='gray.500' p='5' onClick={handleReset}>リセット</Button>
+                    <Button as={Link} href={`/teams/create`} bg='orange.400' p="1rem">
+                        チームを登録する
+                    </Button>
+                </HStack>
 
 
-                    {/* テーブル */}
-                    {/* <Box w="90%" m="auto" marginBottom="10px" h="58vh" border="1px solid" borderColor="gray.200" p="1rem"> */}
-                    <Table.ScrollArea w="90%" m="auto" marginY="2rem" h="70vh" border="1px solid" borderColor="gray.200" p="1rem">
+                {/* テーブル */}
+                <Table.ScrollArea w="90%" m="auto" marginY="2rem" h="70vh" border="1px solid" borderColor="gray.200" p="1rem">
                     <Table.Root>
                         <Table.Header position="sticky" top="0" zIndex="1" bg='gray.400'>
                             <Table.Row>
@@ -140,53 +138,46 @@ const Teams = ({ teams, m_events, filters = {} }) => {
                             </Table.Row>
                         </Table.Header>
 
-                            <Table.Body>
-                                {teams.map((team, index) => (
-                                    <Table.Row key={index}>
-                                        <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{team.team_name}</Table.Cell>
-                                        <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{team.m_event.event_name}</Table.Cell>
-                                        <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                            <Link variant='plain' href=''>
-                                                <Center>
-                                                    <Image src="img/team.png" />
-                                                </Center>
-                                            </Link>
-                                        </Table.Cell>
-                                        <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                            <Link variant='plain' href=''>
-                                                <Center>
-                                                    <Image src="img/athlete.png" />
-                                                </Center>
-                                            </Link>
-                                            {/* <Box colorInterpolation='gray'>
-                                                <Button as={Link} href={``} bg='gray.300' color='white' size='lg'>
-                                                    一覧
-                                                </Button>
-                                            </Box> */}
-                                        </Table.Cell>
-                                        <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                            <Link variant='plain' href=''>
-                                                <Center>
-                                                    <Image src="img/injury_infomation.png" />
-                                                </Center>
-                                            </Link>
-                                        </Table.Cell>
-                                        <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                            <Link variant='plain' href=''>
-                                                <Center>
-                                                    <Image src="img/analyze_data.png" />
-                                                </Center>
-                                            </Link>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                ))}
-                            </Table.Body>
-
+                        <Table.Body>
+                            {teams.map((team, index) => (
+                                <Table.Row key={index}>
+                                    <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{team.team_name}</Table.Cell>
+                                    <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{team.m_event.event_name}</Table.Cell>
+                                    <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
+                                        <Link variant='plain' href=''>
+                                            <Center>
+                                                <Image src="img/team.png" />
+                                            </Center>
+                                        </Link>
+                                    </Table.Cell>
+                                    <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
+                                        <Link variant='plain' href=''>
+                                            <Center>
+                                                <Image src="img/athlete.png" />
+                                            </Center>
+                                        </Link>
+                                    </Table.Cell>
+                                    <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
+                                        <Link variant='plain' href=''>
+                                            <Center>
+                                                <Image src="img/injury_infomation.png" />
+                                            </Center>
+                                        </Link>
+                                    </Table.Cell>
+                                    <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
+                                        <Link variant='plain' href=''>
+                                            <Center>
+                                                <Image src="img/analyze_data.png" />
+                                            </Center>
+                                        </Link>
+                                    </Table.Cell>
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
                     </Table.Root>
-                    </Table.ScrollArea>
-                    {/* </Box> */}
+                </Table.ScrollArea>
 
-                </Box>
+            </Box>
 
         </>
         </ChakraProvider>

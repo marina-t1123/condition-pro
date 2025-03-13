@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('m_event_id')->constrained()->onUpdate('cascade')->comment('種目マスタID');
             $table->string('team_name')->comment('チーム名');
-            $table->text('memo')->comment('メモ・備考');
+            $table->text('memo')->comment('備考');
             $table->timestamps();
         });
     }

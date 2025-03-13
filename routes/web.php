@@ -28,8 +28,14 @@ Route::middleware('auth')->group(function () {
 });
 
 // チーム関連
-Route::get('/teams', [TeamController::class, 'index'])->name('team.index');
-Route::get('/teams/create', [TeamController::class, 'create'])->name('team.create');
+Route::middleware('auth')
+    ->prefix('teams')
+    ->group(function () {
+        Route::get('/', [TeamController::class, 'index'])->name('team.index');
+        Route::get('/create', [TeamController::class, 'create'])->name('team.create');
+        Route::post('/store', [TeamController::class, 'store'])->name('team.store');
+    });
+
 
 //=============================================================
 // マスタ関連

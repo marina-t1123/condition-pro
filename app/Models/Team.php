@@ -10,7 +10,7 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['m_event_id','tema_name', 'memo'];
+    protected $fillable = ['m_event_id','team_name', 'memo'];
 
     // リレーション
     public function mEvent(): BelongsTo
