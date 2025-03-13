@@ -34,6 +34,10 @@ Route::middleware('auth')
         Route::get('/', [TeamController::class, 'index'])->name('team.index');
         Route::get('/create', [TeamController::class, 'create'])->name('team.create');
         Route::post('/store', [TeamController::class, 'store'])->name('team.store');
+        Route::get('/show/{id}', [TeamController::class, 'show'])->name('team.show');
+        Route::get('/edit/{id}', [TeamController::class, 'edit'])->name('team.edit');
+        Route::put('/edit/{id}', [TeamController::class, 'update'])->name('team.update');
+        // Route::delete('/delete/{id}', [TeamController::class, 'delete'])->name('team.destroy');
     });
 
 
