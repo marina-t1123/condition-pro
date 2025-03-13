@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SearchTeamRequest;
 use App\Http\Requests\StoreTeamRequest;
+use App\Http\Requests\UpdateTeamRequest;
 use App\Models\Team;
 use App\Models\MEvent;
 use Inertia\Inertia;
@@ -15,7 +16,6 @@ class TeamController extends Controller
     {
         //検索情報を格納する
         $m_event_id = $request->input('m_event_id');
-        // dd($m_event_id);
         $keyword = $request->input('team_name');
 
         $teams = Team::featchSerachItems($m_event_id, $keyword)->get();
@@ -37,7 +37,7 @@ class TeamController extends Controller
     public function create()
     {
         $m_events = MEvent::all();
-        // dd($m_events);
+
         return Inertia::render('Team/Create', [
             'm_events' => $m_events,
         ]);
@@ -52,15 +52,48 @@ class TeamController extends Controller
         $team = Team::create($validated);
 
         // リダイレクト時に新規登録メッセージを表示する
-        return to_route('team.index')->with('message', '種目【'.$team->mEvent->event_name.'】にチーム【'.$team->team_name.'】を新規登録しました。');
+        return to_route('team.index')->with('message', '種目【' . $team->mEvent->event_name . '】にチーム【' . $team->team_name . '】を新規登録しました。');
+    }
 
+    // チーム詳細ページ表示
+    public function show($id)
+    {
+        $team = Team::findOrFail($id);
+        $m_event = $team->mEvent;
+        // dd($m_event);
+
+        return Inertia::render('Team/Show', [
+            'team' => $team,
+            'm_event' => $m_event
+        ]);
     }
 
     // 編集ページ表示
-    public function edit($m_event)
+    public function edit($id)
     {
+        $team = Team::findOrFail($id);
+        $m_event = $team->mEvent;
+
         return Inertia::render('Team/Edit', [
+            'team' => $team,
             'm_event' => $m_event,
         ]);
+    }
+
+    // 更新処理
+    public function update(UpdateTeamRequest $request, $id)
+    {
+        // dd('a');
+        //　バリデーション後の値を取得
+        $validated = $request->validated();
+        // バリデーション後の値を使用して、対象のteamの情報を更新する
+        $team = Team::findOrFail($id);
+        $team->update($validated);
+        // dd($team);
+
+        $m_event = $team->mEvent;
+
+        // 詳細画面に更新メッセージと共にリダイレクト実施
+        return redirect()->route('team.show', $id)->with('message', '種目【 ' . $m_event->event_name . ' 】の【 ' . $team->team_name . ' 】のチーム情報を更新しました。');
     }
 }

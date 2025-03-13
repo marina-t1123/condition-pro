@@ -144,7 +144,7 @@ const Teams = ({ teams, m_events, filters = {} }) => {
                                     <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{team.team_name}</Table.Cell>
                                     <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{team.m_event.event_name}</Table.Cell>
                                     <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                        <Link variant='plain' href=''>
+                                        <Link variant='plain' href={`/teams/show/${team.id}`}>
                                             <Center>
                                                 <Image src="img/team.png" />
                                             </Center>
