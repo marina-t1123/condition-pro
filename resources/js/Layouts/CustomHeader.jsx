@@ -21,8 +21,9 @@ import {
 
 export const Header = () => {
 
-    // InertiaのusePageを使用し
+    // InertiaのusePageを使用して、フラッシュメッセージを表示できるように設定
     const page = usePage();
+    console.log(page);
     console.log(page.props.flash.message);
 
     return (
