@@ -11,7 +11,12 @@ use Inertia\Inertia;
 
 class TeamController extends Controller
 {
-    // チーム一覧ページ表示
+    /**
+     * チーム一覧ページ表示
+     *
+     * @param SearchTeamRequest $request
+     * @return \Inertia\Responce
+     */
     public function index(SearchTeamRequest $request)
     {
         //検索情報を格納する
@@ -33,7 +38,11 @@ class TeamController extends Controller
         ]);
     }
 
-    // チーム登録画面表示
+    /**
+     * チーム新規作成
+     *
+     * @return \Inertia|Responce
+     */
     public function create()
     {
         $m_events = MEvent::all();
@@ -43,7 +52,12 @@ class TeamController extends Controller
         ]);
     }
 
-    // チーム新規登録機能実装
+    /**
+     * チーム新規登録機能実装
+     *
+     * @param StoreTeamRequest $request
+     * @return \Illuminate\Http\RedirectResponce
+     */
     public function store(StoreTeamRequest $request)
     {
         // バリデーションした値を取得
@@ -55,12 +69,16 @@ class TeamController extends Controller
         return to_route('team.index')->with('message', '種目【' . $team->mEvent->event_name . '】にチーム【' . $team->team_name . '】を新規登録しました。');
     }
 
-    // チーム詳細ページ表示
+    /**
+     * チーム詳細ページ表示
+     *
+     * @param string $id
+     * @return \Inertia\Response
+     */
     public function show($id)
     {
         $team = Team::findOrFail($id);
         $m_event = $team->mEvent;
-        // dd($m_event);
 
         return Inertia::render('Team/Show', [
             'team' => $team,
@@ -68,7 +86,12 @@ class TeamController extends Controller
         ]);
     }
 
-    // 編集ページ表示
+    /**
+     * 編集ページ表示
+     *
+     * @param string $id
+     * @return \Inertia\Response
+     */
     public function edit($id)
     {
         $team = Team::findOrFail($id);
@@ -80,20 +103,46 @@ class TeamController extends Controller
         ]);
     }
 
-    // 更新処理
+    /**
+     * 更新処理
+     *
+     * @param UpdateTeamRequest $request
+     * @var string $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(UpdateTeamRequest $request, $id)
     {
-        // dd('a');
         //　バリデーション後の値を取得
         $validated = $request->validated();
         // バリデーション後の値を使用して、対象のteamの情報を更新する
         $team = Team::findOrFail($id);
         $team->update($validated);
-        // dd($team);
 
         $m_event = $team->mEvent;
 
         // 詳細画面に更新メッセージと共にリダイレクト実施
         return redirect()->route('team.show', $id)->with('message', '種目【 ' . $m_event->event_name . ' 】の【 ' . $team->team_name . ' 】のチーム情報を更新しました。');
+    }
+
+    /**
+     *  削除処理
+     *
+     * @var string $id
+     * @return \Illuminate\Http|RedirectResponse
+     */
+    public function destroy($id)
+    {
+        dd($id);
+        // チームに紐づく選手がいないかチェック、いたら「チームに所属する選手情報が登録されているため、削除できません」と表示
+
+        // 選手に紐づく傷病情報もチェック。あった場合は選手に紐ずく傷病情報があるため、削除できません」と表示
+
+        // 対象のチームを削除する
+        $delete_team = Team::findOrFail($id);
+        $delete_team_name = $delete_team->team_name;
+
+        $delete_team->delete();
+
+        return to_route('team.index')->with('message', 'チーム名【'.$delete_team_name.'】を削除しました。');
     }
 }

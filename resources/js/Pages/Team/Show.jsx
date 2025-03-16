@@ -22,8 +22,18 @@ import {
 const Show = ({ team, m_event }) => {
     // console.log(team);
     // 編集フォームへの遷移時の処理
+    const { delete:destroy } = useForm();
 
     // 削除ボタンクリック時の処理
+    const handleDelete = (team_id ,e) => {
+        //再レンダリング防止
+        e.preventDefault();
+        console.log('削除実施');
+
+        //delete
+        // destroy(`/teams/delete/${team_id}`);
+        destroy(route('team.destroy', team_id));
+    }
 
 
     return (
@@ -57,7 +67,7 @@ const Show = ({ team, m_event }) => {
                                     <HStack gap='4'>
                                         <Button as={Link} href={`/teams`} color='white' bg="gray.500" p='0.5rem'>一覧画面</Button>
                                         <Button as={Link} href={`/teams/edit/${team.id}`} color='white' bg="orange.400" p='0.5rem'>チーム情報編集</Button>
-                                        <Button as={Link} href={`/teams`} color='white' bg="black" p='0.5rem'>削除</Button>
+                                        {/* <Button as={Link} href={`/teams`} color='white' bg="black" p='0.5rem'>削除</Button> */}
                                         <Dialog.Root>
                                             <Dialog.Trigger asChild>
                                                 <Button variant="outline" size="md" color='white' bg='black' p='1rem'>
@@ -83,7 +93,7 @@ const Show = ({ team, m_event }) => {
                                                             <Dialog.ActionTrigger asChild>
                                                                 <Button variant="outline">キャンセル</Button>
                                                             </Dialog.ActionTrigger>
-                                                            <Button color='white' bg='black' p='0.5rem'>削除する</Button>
+                                                                <Button type='submit' color='white' bg='black' p='0.5rem' onClick={ (e) => handleDelete(team.id, e) }>削除する</Button>
                                                         </Dialog.Footer>
                                                     </Dialog.Content>
                                                 </Dialog.Positioner>

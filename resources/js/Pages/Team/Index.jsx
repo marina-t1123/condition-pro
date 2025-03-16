@@ -129,12 +129,11 @@ const Teams = ({ teams, m_events, filters = {} }) => {
                     <Table.Root>
                         <Table.Header position="sticky" top="0" zIndex="1" bg='gray.400'>
                             <Table.Row>
-                                <Table.ColumnHeader borderBottom="2px solid" borderColor="gray.400" textAlign='center' w='15%' fontSize={'md'}>チーム名</Table.ColumnHeader>
-                                <Table.ColumnHeader borderBottom="2px solid" borderColor="gray.400" textAlign='center' w='15%' fontSize={'md'}>種目</Table.ColumnHeader>
+                                <Table.ColumnHeader borderBottom="2px solid" borderColor="gray.400" textAlign='center' minWidth='15%' fontSize={'md'}>チーム名</Table.ColumnHeader>
+                                <Table.ColumnHeader borderBottom="2px solid" borderColor="gray.400" textAlign='center' minWidth='15%' fontSize={'md'}>種目</Table.ColumnHeader>
                                 <Table.ColumnHeader borderBottom="2px solid" borderColor="gray.400" textAlign='center' fontSize={'md'}>チーム詳細</Table.ColumnHeader>
                                 <Table.ColumnHeader borderBottom="2px solid" borderColor="gray.400" textAlign='center' fontSize={'md'}>所属選手一覧</Table.ColumnHeader>
                                 <Table.ColumnHeader borderBottom="2px solid" borderColor="gray.400" textAlign='center' fontSize={'md'}>傷病者一覧</Table.ColumnHeader>
-                                <Table.ColumnHeader borderBottom="2px solid" borderColor="gray.400" textAlign='center' fontSize={'md'}>分析一覧</Table.ColumnHeader>
                             </Table.Row>
                         </Table.Header>
 
@@ -161,13 +160,6 @@ const Teams = ({ teams, m_events, filters = {} }) => {
                                         <Link variant='plain' href=''>
                                             <Center>
                                                 <Image src="img/injury_infomation.png" />
-                                            </Center>
-                                        </Link>
-                                    </Table.Cell>
-                                    <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                        <Link variant='plain' href=''>
-                                            <Center>
-                                                <Image src="img/analyze_data.png" />
                                             </Center>
                                         </Link>
                                     </Table.Cell>
