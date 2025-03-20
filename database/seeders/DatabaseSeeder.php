@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
             MEventSeeder::class,
             MEventPositionSeeder::class,
             TeamSeeder::class,
+            SexSeeder::class,
+            AthleteSeeder::class,
+            PlayerPositionSeeder::class,
         ]);
     }
 }

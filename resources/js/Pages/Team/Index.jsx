@@ -24,7 +24,7 @@ import {
     DialogRoot,
     DialogTitle,
     DialogTrigger,
-  } from "../../../../src/components/ui/dialog"
+  } from "../../../../src/components/ui/dialog";
 import { Field } from '../../../../src/components/ui/field';
 
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class MEventPosition extends Model
 {
@@ -12,9 +13,22 @@ class MEventPosition extends Model
 
     protected $fillable = ['m_event_id', 'event_position_name'];
 
-    // リレーション
+    /**
+     * ポジション・階級に紐づく種目
+     */
     public function mEvent(): BelongsTo
     {
         return $this->belongsTo(MEvent::class);
     }
+
+    /**
+     * ポジション・階級に紐づく選手
+     */
+    public function athletes():BelongsToMany
+    {
+        return $this->belongsToMany(Athlete::class)->withTimestamps();
+    }
+
+
+
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Team extends Model
 {
@@ -16,6 +17,14 @@ class Team extends Model
     public function mEvent(): BelongsTo
     {
         return $this->belongsTo(MEvent::class);
+    }
+
+    /**
+     * チームに紐づく選手
+     */
+    public function athletes(): HasMany
+    {
+        return $this->hasMany(Athlete::class, 'team_id')->chaperone();
     }
 
     // メソッド

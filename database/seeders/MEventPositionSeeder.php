@@ -45,6 +45,34 @@ class MEventPositionSeeder extends Seeder
                 'event_position_name' => '円盤投げ',
                 'created_at' => $now,
                 'updated_at' => $now
+            ],
+            [
+                'id' => 5,
+                'm_event_id' => 2,
+                'event_position_name' => '短距離100m',
+                'created_at' => $now,
+                'updated_at' => $now
+            ],
+            [
+                'id' => 6,
+                'm_event_id' => 2,
+                'event_position_name' => '短距離200m',
+                'created_at' => $now,
+                'updated_at' => $now
+            ],
+            [
+                'id' => 7,
+                'm_event_id' => 2,
+                'event_position_name' => '競歩',
+                'created_at' => $now,
+                'updated_at' => $now
+            ],
+            [
+                'id' => 8,
+                'm_event_id' => 2,
+                'event_position_name' => 'マラソン',
+                'created_at' => $now,
+                'updated_at' => $now
             ]
         ]);
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AthleteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\MEventController;
@@ -38,6 +39,20 @@ Route::middleware('auth')
         Route::get('/edit/{id}', [TeamController::class, 'edit'])->name('team.edit');
         Route::put('/edit/{id}', [TeamController::class, 'update'])->name('team.update');
         Route::delete('/delete/{id}', [TeamController::class, 'destroy'])->name('team.destroy');
+    });
+
+// 選手関連
+Route::middleware('auth')
+    ->prefix('athletes')
+    ->group(function () {
+        Route::get('/', [AthleteController::class, 'index'])->name('athlete.index');
+        Route::get('/team/{id}', [AthleteController::class, 'showRespectiveTeam'])->name('athlete.show_respective_team');
+        Route::get('/create', [AthleteController::class, 'create'])->name('athlete.create');
+        Route::post('/store', [AthleteController::class, 'store'])->name('athlete.store');
+        Route::get('/show/{id}', [AthleteController::class, 'show'])->name('athlete.show');
+        Route::get('/edit/{id}', [AthleteController::class, 'edit'])->name('athlete.edit');
+        Route::put('/edit/{id}', [AthleteController::class, 'update'])->name('athlete.update');
+        Route::delete('/delete/{id}', [AthleteController::class, 'destroy'])->name('ahtlete.destroy');
     });
 
 
