@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchAthleteRequest;
 use App\Models\Athlete;
 use App\Models\MEvent;
 use Illuminate\Http\Request;
@@ -11,13 +12,25 @@ class AthleteController extends Controller
 {
     /**
      * 選手一覧画面
+     *
+     * @var string $search_name
+     * @var interger $search_event_id
+     * @var interger $search_position_id
      */
-    public function index()
+    public function index(Request $request)
     {
-        // 検索フォームでの検索ワード(バリデーション済み)を取得する(後ほど)
+        // dd($request->validated());
+        // ↓検索機能を実装する際に、以下の内容の処理を実装する
+        // 1. 検索フォームでの検索情報の値(バリデーション済み)を取得する
+        $search_name = $request->input('athlete_name');
+        $search_event_id = $request->input('m_event_id');
+        $search_position_id = $request->input('m_event_position_id');
 
-        // 現在の登録済みの各選手に紐ずく情報(チーム・ポジション・種目・性別情報)を取得する
-        $athletes = Athlete::with(['team', 'sex', 'mEventPositions.mEvent'])->get();
+        // dd($search_event_id);
+
+        // 2. Athleteモデルで検索情報に一致する選手情報のメソッドを作成後に、メソッドの引数で検索フォームの値を引数で渡す。
+        $athletes = Athlete::featchSearchAthlete($search_name, $search_event_id, $search_position_id)->get();
+        // 3. 2で取得した条件に合う選手情報を、$athletesに格納する
 
         // 種目・種目に紐ずくポジションの情報を取得する
         $m_events = MEvent::getAllMEventAndPositions()->get();

@@ -47,28 +47,36 @@ class Athlete extends Model
 
         // 選手の名前が検索フォームから検索された場合
         if(!empty($search_name)) {
-            $query->where('name', 'LIKE', '%{$search_name}%');
+            $query->where('name', 'LIKE', '%'.$search_name.'%');
         }
 
         // 種目名が検索フォームから検索された場合
         if(!empty($search_event_id)) {
-            $query->whereHas('Team', function($query) use ($search_event_id) {
+            $query->whereHas('team', function($query) use ($search_event_id) {
                 $query->where('m_event_id', $search_event_id);
             });
         }
 
         // 種目名、ポジション・階級のそれぞれのIDが送信された場合
         if(!empty($search_event_id) && !empty($search_position_id)) {
+
             // すでに取得済みの選手情報に紐づくポジションを指定条件で取得
-            $query->load(['mEventPositions' => function($query) use($search_event_id, $search_position_id) {
+            $query->with(['mEventPositions' => function($query) use($search_event_id, $search_position_id) {
                 // 指定されたポジションIDのみ取得する
                 $query->where('m_event_positions.id', $search_position_id)
                     // かつ、そのポジションが指定された種目に属していることを確認
-                    ->whereHas('mEvent', function($sq) use ($search_event_id) {
-
+                    ->whereHas('mEvent', function($query) use ($search_event_id) {
+                        $query->where('id', $search_event_id);
                     });
-            }]);
 
+                // ポジションに紐づく種目情報も取得する
+                $query->with('mEvent');
+
+            }]);
         }
+
+        $searchAthletes = $query;
+
+        return $searchAthletes;
     }
 }
