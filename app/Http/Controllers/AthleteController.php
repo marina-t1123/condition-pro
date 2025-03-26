@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SearchAthleteRequest;
+use App\Http\Requests\StoreAthleteRequest;
 use App\Models\Athlete;
 use App\Models\MEvent;
+use App\Models\Sex;
+use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class AthleteController extends Controller
@@ -55,15 +59,51 @@ class AthleteController extends Controller
      */
     public function create()
     {
+        // 登録されているチーム情報とそのチームに紐づく種目・ポジションを一緒に取得
+        $team_event_positions = Team::with('mEvent.mEventPositions')->get();
+        // dd($team_event_datas);
 
+        // 性別テーブルの情報を取得
+        $sexes = Sex::all();
+
+        // リダイレクト処理
+        return Inertia::render('Athlete/Create', [
+            'team_event_positions' => $team_event_positions,
+            'sexes' => $sexes
+        ]);
     }
 
     /**
      * 選手登録
+     *
+     * @param StoreAthleteRequest $request
+     * @return \Inertia\Responce
      */
-    public function store()
+    public function store(StoreAthleteRequest $storeAthleteRequest)
     {
 
+        $storeAthleteRequest->validated();
+
+        // 選手を新規作成
+        $athlete = DB::transaction(function() use($storeAthleteRequest) {
+            $athlete = Athlete::create([
+                'team_id' => $storeAthleteRequest->team_id,
+                'sex_id' => $storeAthleteRequest->sex_id,
+                'name' => $storeAthleteRequest->athlete_name,
+                'birthday' => $storeAthleteRequest->birthday,
+                'memo' => $storeAthleteRequest->memo
+            ]);
+
+            $pivotPlayerPositionData = $storeAthleteRequest->m_event_position_id;
+
+            $athlete->mEventPositions()->sync($pivotPlayerPositionData);
+
+            return $athlete;
+
+        });
+
+        // リダイレクト時に新規登録メッセージを表示する
+        return to_route('athlete.index')->with('message', '【'. $athlete->name . '】の選手情報を新規登録しました。');
     }
 
     /**

@@ -34,7 +34,7 @@ class Athlete extends Model
      */
     public function mEventPositions():BelongsToMany
     {
-        return $this->belongsToMany(MEventPosition::class, 'player_position')->withTimestamps();
+        return $this->belongsToMany(MEventPosition::class, 'player_position', 'athlete_id', 'm_event_position_id')->withTimestamps();
     }
 
     /**

@@ -26,7 +26,7 @@ class MEventPosition extends Model
      */
     public function athletes():BelongsToMany
     {
-        return $this->belongsToMany(Athlete::class)->withTimestamps();
+        return $this->belongsToMany(Athlete::class, 'player_position', 'athlete_id', 'm_event_position_id')->withTimestamps();
     }
 
 

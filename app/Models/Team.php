@@ -27,8 +27,10 @@ class Team extends Model
         return $this->hasMany(Athlete::class, 'team_id')->chaperone();
     }
 
-    // メソッド
-    public static function featchSerachItems($m_event_id, $keyword)
+    /**
+     * 選手一覧画面での検索
+     */
+    public static function featchSerachTeams($m_event_id, $keyword)
     {
         $query = Team::query();
 
@@ -44,4 +46,8 @@ class Team extends Model
 
         return $searchTeams;
     }
+
+    /**
+     * 登録済みの各チーム情報に紐づく種目・ポジションを取得する
+     */
 }
