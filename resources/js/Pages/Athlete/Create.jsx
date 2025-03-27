@@ -152,6 +152,7 @@ const Create = (props) => {
                                 ))}
                             </HStack>
                         </RadioGroup.Root>
+                        {errors.sex_id && <Text color='red.500'>{errors.sex_id}</Text>}
                     </Stack>
                     <Stack gap='2' w='full' marginBottom='1rem'>
                         <Text>生年月日</Text>
