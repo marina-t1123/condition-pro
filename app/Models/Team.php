@@ -50,4 +50,20 @@ class Team extends Model
     /**
      * 登録済みの各チーム情報に紐づく種目・ポジションを取得する
      */
+    public static function featchSerachItems($m_event_id, $keyword)
+    {
+        $query = Team::query();
+
+        if (!empty($m_event_id)) {
+            $query->where('m_event_id', $m_event_id);
+        }
+
+        if (!empty($keyword)) {
+            $query->where("team_name", "LIKE", "%{$keyword}%");
+        }
+
+        $searchTeams = $query->with('mEvent');
+
+        return $searchTeams;
+    }
 }
