@@ -23,8 +23,8 @@ export const Header = () => {
 
     // InertiaのusePageを使用して、フラッシュメッセージを表示できるように設定
     const page = usePage();
-    console.log(page);
-    console.log(page.props.flash.message);
+    // console.log(page);
+    // console.log(page.props.flash.message);
 
     return (
         <Box>
@@ -36,7 +36,7 @@ export const Header = () => {
                 <Box className='menu'>
                     <HStack direction={{ base: "column", md: "row" }} gap="10" separator={<StackSeparator />}>
                         <Text as={Link} href={`/teams`}>チーム</Text>
-                        <Link>選手</Link>
+                        <Text as={Link} href={`/athletes`}>選手</Text>
                         <Link>傷病情報</Link>
                         <Link>グラフ</Link>
                         <MenuRoot>

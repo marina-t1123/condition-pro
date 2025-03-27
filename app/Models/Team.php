@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Team extends Model
 {
@@ -18,8 +19,18 @@ class Team extends Model
         return $this->belongsTo(MEvent::class);
     }
 
-    // メソッド
-    public static function featchSerachItems($m_event_id, $keyword)
+    /**
+     * チームに紐づく選手
+     */
+    public function athletes(): HasMany
+    {
+        return $this->hasMany(Athlete::class, 'team_id')->chaperone();
+    }
+
+    /**
+     * 選手一覧画面での検索
+     */
+    public static function featchSerachTeams($m_event_id, $keyword)
     {
         $query = Team::query();
 
@@ -35,4 +46,8 @@ class Team extends Model
 
         return $searchTeams;
     }
+
+    /**
+     * 登録済みの各チーム情報に紐づく種目・ポジションを取得する
+     */
 }
