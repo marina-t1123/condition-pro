@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\PlayerPosition;
 
 class Athlete extends Model
 {
@@ -34,7 +35,7 @@ class Athlete extends Model
      */
     public function mEventPositions():BelongsToMany
     {
-        return $this->belongsToMany(MEventPosition::class, 'player_position', 'athlete_id', 'm_event_position_id')->withTimestamps();
+        return $this->belongsToMany(MEventPosition::class, 'player_positions', 'athlete_id', 'm_event_position_id')->withTimestamps();
     }
 
     /**
@@ -75,8 +76,40 @@ class Athlete extends Model
             }]);
         }
 
-        $searchAthletes = $query;
+        $search_athletes = $query;
 
-        return $searchAthletes;
+        return $search_athletes;
     }
+
+    /**
+     * 対象選手のポジション情報関連の情報をデータ配列にして取得
+     */
+    public static function setAthletePositionData($athlete, $position_id) {
+
+        // 対象のplayer_positions(中間テーブル)のIDを取得する
+        if(!empty($athlete->id) && !empty($position_id)) {
+            $player_position = PlayerPosition::where('athlete_id', $athlete->id)
+                ->where('m_event_position_id', $position_id)
+                ->first();
+
+            $player_position_id = $player_position->id;
+        }
+
+        // 選手の種目名を取得する
+        if($player_position_id) {
+            $m_event_position = MEventPosition::findOrFail($position_id);
+            $position_name = $m_event_position->event_position_name;
+        }
+
+         // 選手データを配列に変換
+        $athlete_data_array = $athlete->toArray();
+
+        // ポジション情報を直接アクセス可能なプロパティとして追加
+        $athlete_data_array['m_event_position_id'] = $position_id;
+        $athlete_data_array['event_position_name'] = $position_name;
+        $athlete_data_array['player_position_id'] = $player_position_id;
+
+        return $athlete_data_array;
+    }
+
 }

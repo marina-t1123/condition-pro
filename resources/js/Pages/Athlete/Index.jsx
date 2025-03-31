@@ -11,7 +11,7 @@ import {
     NativeSelectRoot,
     NativeSelectField,
     Table,
-    TableBody,
+    Image
 } from '@chakra-ui/react';
 import React, { useState, useMemo, useEffect } from 'react';
 import CustomHeader from '@/Layouts/CustomHeader';
@@ -64,6 +64,8 @@ const Index = (props) => {
         return expandedAthleteList;
 
     },[athleteList]);
+
+    console.log(expandedAthletes);
 
     // ポジションoptionのstate管理の設定
     const [positionOptions, setPositionOptions] = useState([]);
@@ -197,11 +199,12 @@ const Index = (props) => {
                     <Table.Root>
                         <Table.Header position='sticky' top='0' zIndex='1' bg='gray.400'>
                             <Table.Row>
-                                <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' minWidth='15%' fontSize='md'>選手名</Table.ColumnHeader>
-                                <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' minWidth='15%' fontSize='md'>チーム名</Table.ColumnHeader>
-                                <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' minWidth='15%' fontSize='md'>種目名</Table.ColumnHeader>
-                                <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' minWidth='15%' fontSize='md'>ポジション・階級</Table.ColumnHeader>
+                                <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' fontSize='md'>選手名</Table.ColumnHeader>
+                                <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' fontSize='md'>チーム名</Table.ColumnHeader>
+                                <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' fontSize='md'>種目名</Table.ColumnHeader>
+                                <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' fontSize='md'>ポジション・階級</Table.ColumnHeader>
                                 <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' fontSize='md'>詳細</Table.ColumnHeader>
+                                <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' fontSize='md'>編集</Table.ColumnHeader>
                                 <Table.ColumnHeader borderBottom='2px solid' borderColor="gray.400" textAlign='center' fontSize='md'>傷病情報</Table.ColumnHeader>
                             </Table.Row>
                         </Table.Header>
@@ -210,17 +213,26 @@ const Index = (props) => {
                             {/*  ポジションごとに格納した選手情報の配列から各選手情報を取り出す */}
                             {expandedAthletes.map((athlete, i) =>
                                 <Table.Row key={i}>
-                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" minWidth='15%'>
+                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" >
                                         {athlete.name}
                                     </Table.Cell>
-                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" minWidth='15%'>
+                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" >
                                         {athlete.team.team_name}
                                     </Table.Cell>
-                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" minWidth='15%'>
+                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" >
                                         {athlete.event.event_name}
                                     </Table.Cell>
-                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" minWidth='15%'>
+                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" >
                                         {athlete.position.event_position_name}
+                                    </Table.Cell>
+                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300">
+                                    </Table.Cell>
+                                    <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300">
+                                            <Link variant='plain' href={`/athletes/edit/${athlete.id}/${athlete.position.id}`}>
+                                                <Center>
+                                                    <Image src="img/edit.png"></Image>
+                                                </Center>
+                                            </Link>
                                     </Table.Cell>
                                     <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300">
                                     </Table.Cell>
