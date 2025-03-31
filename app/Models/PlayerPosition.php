@@ -11,7 +11,7 @@ class PlayerPosition extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['athlete_id', 'm_evente_position_id'];
+    protected $fillable = ['athlete_id', 'm_event_position_id'];
 
 
 }

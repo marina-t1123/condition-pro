@@ -50,8 +50,8 @@ Route::middleware('auth')
         Route::get('/create', [AthleteController::class, 'create'])->name('athlete.create');
         Route::post('/store', [AthleteController::class, 'store'])->name('athlete.store');
         Route::get('/show/{id}', [AthleteController::class, 'show'])->name('athlete.show');
-        Route::get('/edit/{id}', [AthleteController::class, 'edit'])->name('athlete.edit');
-        Route::put('/edit/{id}', [AthleteController::class, 'update'])->name('athlete.update');
+        Route::get('/edit/{athlete_id}/{position_id}', [AthleteController::class, 'edit'])->name('athlete.edit');
+        Route::put('/edit/{athlete_id}', [AthleteController::class, 'update'])->name('athlete.update');
         Route::delete('/delete/{id}', [AthleteController::class, 'destroy'])->name('ahtlete.destroy');
     });
 

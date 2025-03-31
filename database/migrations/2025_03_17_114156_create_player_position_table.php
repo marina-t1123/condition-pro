@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('player_position', function (Blueprint $table) {
+        Schema::create('player_positions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('athlete_id')->constrained()->onDelete('cascade')->comment('選手ID');
             $table->foreignId('m_event_position_id')->constrained()->onDelete('cascade')->comment('種目ポジションID');
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('player_position');
+        Schema::dropIfExists('player_positions');
     }
 };

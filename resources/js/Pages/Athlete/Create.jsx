@@ -6,7 +6,6 @@ import {
     NativeSelect,
     Stack,
     Text,
-    VStack,
     HStack,
     RadioGroup,
     Textarea,
@@ -21,7 +20,6 @@ const Create = (props) => {
 
     // propsから、チーム・種目・ポジションと性別情報を取得
     const { team_event_positions, sexes } = props;
-    console.log(team_event_positions);
 
     // 性別のradioボタンの値
     const items = [
