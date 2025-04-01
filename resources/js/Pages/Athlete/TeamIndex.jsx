@@ -27,14 +27,29 @@ import {
 import { Field } from '../../../../src/components/ui/field';
 import { Link, useForm } from '@inertiajs/react';
 
-const Index = (props) => {
+const TeamIndex = (props) => {
     // 選手情報と種目・ポジション情報をprops内から分割代入でそれぞれ変数内に格納する形で取り出す
-    const { athletes: initialAthletes, m_events } = props;
+    const { athletes: initialAthletes, team, m_event_positions } = props;
+    console.log(m_event_positions);
+
+    const mEventId = team.m_event.id;
+    const mEventName = team.m_event.name;
+
+    const mEventPositionList = [];
+    const mEventPositons = m_event_positions.forEach((m_event_position) => {
+        mEventPositionList.push({
+            ...m_event_position,
+            position_id: m_event_position.id,
+            position_name: m_event_position.event_position_name
+        });
+    });
+
+    console.log(mEventPositionList);
 
     //　useFormを設定
     const { data, setData, get, errors } = useForm({
         'athlete_name': '',
-        'm_event_id': '',
+        'm_event_id': mEventId,
         'm_event_position_id': ''
     });
     console.log(data);
@@ -65,30 +80,6 @@ const Index = (props) => {
 
     }, [athleteList]);
 
-    // ポジションoptionのstate管理の設定
-    const [positionOptions, setPositionOptions] = useState([]);
-    console.log(positionOptions);
-
-    // 種目optionが変更された場合の、ポジションoptionをセットする処理
-    useEffect(() => {
-        console.log('useEffectの処理実行');
-        if (data.m_event_id) {
-            console.log('検索処理start');
-            // 種目に紐づくポジション・階級をm_events(props)から検索して取得
-            const selectedEvent = m_events.find(event => event.id.toString() === data.m_event_id);
-            console.log(selectedEvent);
-
-            if (selectedEvent && selectedEvent.m_event_positions) {
-                setPositionOptions(selectedEvent.m_event_positions);
-            } else {
-                setPositionOptions([]);
-            }
-        }
-
-        // 種目が変更されたら、検索フォームstate(ポジション・階級の選択)をリセット
-        setData('m_event_position_id', '');
-    }, [data.m_event_id]);
-
     // 検索フォームの内容が変更された際の処理
     const handleChange = (e) => {
         setData({ ...data, [e.target.name]: e.target.value });
@@ -98,13 +89,23 @@ const Index = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        get(route('athlete.index'), {
+        get(`/athletes/team/${team.id}`, {
             athlete_name: data.athlete_name,
-            m_event_id: parseInt(data.m_event_id, 10),
+            m_event_id: data.m_event_id,
             m_event_position_id: parseInt(data.m_event_position_id, 10)
         });
 
     }
+
+    // リセットボタンを押した時の処理
+    const handleReset = () => {
+
+    }
+
+    // 編集ボタンをクリックした際の処理
+
+    // 削除ボタンを押した時の処理
+
 
     return (
         <ChakraProvider value={defaultSystem}>
@@ -113,8 +114,8 @@ const Index = (props) => {
 
                 {/* メイン */}
                 <Box className='main' width='90%' m='auto' bg='white' marginTop='20px' boxShadow='md'>
-                    <HStack bg='gray.400' color='white'>
-                        <Text textStyle='2xl' m='20px'>選手一覧</Text>
+                    <HStack bg='gray.400' color='white' justifyContent={'center'}>
+                        <Text textStyle='2xl' m='20px'>【{team.team_name}】選手一覧</Text>
                         <DialogRoot>
                             <DialogTrigger asChild>
                                 <Button variant="outline" size="xxl" bg="gray.800" p='0.5rem' w="10%">
@@ -141,14 +142,8 @@ const Index = (props) => {
                                                 />
                                             </Field>
                                             {errors.athlete_name && <Text color="red.500">{errors.athlete_name}</Text>}
-                                            <Field label="種目">
-                                                <NativeSelectRoot>
-                                                    <NativeSelectField placeholder='種目を選択してください' name='m_event_id' value={data.m_event_id} onChange={handleChange}>
-                                                        {m_events.map((m_event, i) => <option key={i} value={m_event.id}>{m_event.event_name}</option>)}
-                                                    </NativeSelectField>
-                                                </NativeSelectRoot>
-                                            </Field>
-                                            {errors.m_event_id && <Text color="red.500">{errors.m_event_id}</Text>}
+                                        </Stack>
+                                        <Stack gap="4">
                                             <Field label="ポシジョン・階級">
                                                 <NativeSelectRoot>
                                                     <NativeSelectField
@@ -156,9 +151,8 @@ const Index = (props) => {
                                                         name='m_event_position_id'
                                                         value={data.m_event_position_id}
                                                         onChange={handleChange}
-                                                        disabled={!data.m_event_id}
                                                     >
-                                                        {positionOptions.map((positionOption, i) => <option key={i} value={positionOption.id}>{positionOption.event_position_name}</option>)}
+                                                        {mEventPositionList.map((positionOption, i) => <option key={i} value={positionOption.id}>{positionOption.event_position_name}</option>)}
                                                     </NativeSelectField>
                                                 </NativeSelectRoot>
                                             </Field>
@@ -172,7 +166,7 @@ const Index = (props) => {
                                 <DialogCloseTrigger />
                             </DialogContent>
                         </DialogRoot>
-                        <Button as={Link} href={`/athletes`} color='white' bg='gray.500' p='5'>リセット</Button>
+                        <Button as={Link} href={`/athletes/team/${team.id}`} color='white' bg='gray.500' p='5' onClick={handleReset}>リセット</Button>
                         <Button as={Link} href={`/athletes/create`} bg='orange.400' p="1rem">
                             選手を登録する
                         </Button>
@@ -199,35 +193,43 @@ const Index = (props) => {
                             {expandedAthletes.map((athlete, i) =>
                                 <Table.Row key={i}>
                                     <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" >
-                                        {athlete.name}
+                                        <Center>
+                                            {athlete.name}
+                                        </Center>
                                     </Table.Cell>
                                     <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" >
-                                        {athlete.team.team_name}
+                                        <Center>
+                                            {athlete.team.team_name}
+                                        </Center>
                                     </Table.Cell>
                                     <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" >
-                                        {athlete.event.event_name}
+                                        <Center>
+                                            {athlete.event.event_name}
+                                        </Center>
                                     </Table.Cell>
                                     <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300" >
-                                        {athlete.position.event_position_name}
+                                        <Center>
+                                            {athlete.position.event_position_name}
+                                        </Center>
                                     </Table.Cell>
                                     <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300">
                                         <Link variant='plain' href={`/athletes/show/${athlete.id}/${athlete.position.id}`}>
                                             <Center>
-                                                <Image src="img/athlete.png"></Image>
+                                                <Image src="/img/athlete.png" />
                                             </Center>
                                         </Link>
                                     </Table.Cell>
                                     <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300">
                                         <Link variant='plain' href={`/athletes/edit/${athlete.id}/${athlete.position.id}`}>
                                             <Center>
-                                                <Image src="img/edit.png"></Image>
+                                                <Image src="/img/edit.png" />
                                             </Center>
                                         </Link>
                                     </Table.Cell>
                                     <Table.Cell textAlign='ceanter' borderBottom="1px solid" borderColor="gray.300">
                                         <Link variant='plain' href={`/athletes/edit/${athlete.id}/${athlete.position.id}`}>
                                             <Center>
-                                                <Image src="img/injury_infomation.png"></Image>
+                                                <Image src="/img/injury_infomation.png" />
                                             </Center>
                                         </Link>
                                     </Table.Cell>
@@ -242,4 +244,4 @@ const Index = (props) => {
         </ChakraProvider>
     )
 }
-export default Index;
+export default TeamIndex;
