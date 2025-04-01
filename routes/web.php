@@ -52,7 +52,7 @@ Route::middleware('auth')
         Route::get('/show/{athlete_id}/{position_id}', [AthleteController::class, 'show'])->name('athlete.show');
         Route::get('/edit/{athlete_id}/{position_id}', [AthleteController::class, 'edit'])->name('athlete.edit');
         Route::put('/edit/{athlete_id}', [AthleteController::class, 'update'])->name('athlete.update');
-        Route::delete('/delete/{id}', [AthleteController::class, 'destroy'])->name('ahtlete.destroy');
+        Route::delete('/delete/{athlete_id}', [AthleteController::class, 'destroy'])->name('athlete.destroy');
     });
 
 

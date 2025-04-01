@@ -136,7 +136,7 @@ class AthleteController extends Controller
         $storeAthleteRequest->validated();
 
         // 選手を新規作成
-        $athlete = DB::transaction(function() use($storeAthleteRequest) {
+        $athlete = DB::transaction(function () use ($storeAthleteRequest) {
             $athlete = Athlete::create([
                 'team_id' => $storeAthleteRequest->team_id,
                 'sex_id' => $storeAthleteRequest->sex_id,
@@ -150,11 +150,10 @@ class AthleteController extends Controller
             $athlete->mEventPositions()->syncWithoutDetaching($pivotPlayerPositionData);
 
             return $athlete;
-
         });
 
         // リダイレクト時に新規登録メッセージを表示する
-        return to_route('athlete.index')->with('message', '【'. $athlete->name . '】の選手情報を更新しました。');
+        return to_route('athlete.index')->with('message', '【' . $athlete->name . '】の選手情報を更新しました。');
     }
 
     /**
@@ -163,7 +162,7 @@ class AthleteController extends Controller
     public function show($athlete_id, $position_id)
     {
         // 対象のIDを持つ選手とリレーション関係のデータを取得する
-        $athlete =Athlete::with('team.mEvent', 'sex', 'mEventPositions')->findOrFail($athlete_id);
+        $athlete = Athlete::with('team.mEvent', 'sex', 'mEventPositions')->findOrFail($athlete_id);
 
         $athlete_data_array = $athlete->setAthletePositionData($athlete, $position_id);
 
@@ -184,9 +183,9 @@ class AthleteController extends Controller
     public function edit($athlete_id, $position_id)
     {
         // 対象のIDを持つ選手とリレーション関係のデータを取得する
-        $athlete =Athlete::with('team.mEvent', 'sex', 'mEventPositions')->findOrFail($athlete_id);
+        $athlete = Athlete::with('team.mEvent', 'sex', 'mEventPositions')->findOrFail($athlete_id);
 
-        $athlete_data_array= $athlete->setAthletePositionData($athlete, $position_id);
+        $athlete_data_array = $athlete->setAthletePositionData($athlete, $position_id);
 
         // 登録されているチームに紐づく種目・ポジションを取得する
         $team_event_positions = MEventPosition::where('m_event_id', '=', $athlete->team->m_event_id)->get();
@@ -199,7 +198,6 @@ class AthleteController extends Controller
             'team_event_positions' => $team_event_positions,
             'sexes' => $sexes
         ]);
-
     }
 
     /**
@@ -215,7 +213,7 @@ class AthleteController extends Controller
         $update_m_event_position_id = intval($updateAthleteRequest['m_event_position_id']);
 
 
-        DB::transaction(function() use($setAthlete, $updateAthleteRequest, $setPlayerPosition, $update_m_event_position_id){
+        DB::transaction(function () use ($setAthlete, $updateAthleteRequest, $setPlayerPosition, $update_m_event_position_id) {
 
             // 選手情報更新
             $setAthlete->update([
@@ -234,15 +232,33 @@ class AthleteController extends Controller
         });
 
         // リダイレクト時に編集メッセージを表示する
-        return to_route('athlete.index')->with('message', '【'. $setAthlete->name . '】の選手情報を編集しました。');
+        return to_route('athlete.index')->with('message', '【' . $setAthlete->name . '】の選手情報を編集しました。');
     }
 
     /**
      * 選手削除
      */
-    public function destroy()
+    public function destroy($athlete_id)
     {
+        $deleteAthlete = Athlete::with('mEventPositions', 'team')->findOrFail($athlete_id);
 
+        $deleteAthleteNama = $deleteAthlete->name;
+        $deleteAthletePositions = $deleteAthlete->mEventPositions()
+            ->wherePivot('athlete_id', $deleteAthlete->id)
+            ->get();
+
+        DB::transaction(function () use ($deleteAthlete, $deleteAthletePositions) {
+
+            foreach ($deleteAthletePositions as $deleteAthletePosition) {
+                DB::table('player_positions')
+                    ->where('athlete_id', $deleteAthlete->id)
+                    ->where('m_event_position_id', $deleteAthletePosition->id)
+                    ->delete();
+            };
+
+            $deleteAthlete->destroy;
+        });
+
+        return to_route('athlete.index')->with('message', '【' . $deleteAthleteNama . '】の選手情報・関連登録情報を削除しました。');
     }
-
 }

@@ -1,5 +1,4 @@
 import { Link, useForm } from '@inertiajs/react';
-import { useEffect, useState, useMemo } from 'react';
 import CustomHeader from '@/Layouts/CustomHeader';
 import {
     Box,
@@ -12,13 +11,18 @@ import {
     Button,
     HStack,
     RadioGroup,
+    CloseButton,
+    Dialog,
+    Portal
 } from '@chakra-ui/react';
 
 
 const Show = (props) => {
 
     // propsから、チーム・種目・ポジションを取得
-    const { athlete, team_event_positions, sexes } = props;
+    const { athlete, sexes } = props;
+
+    const{ delete:destroy } = useForm();
 
     // 性別の登録情報を取得して、radioの値に設定
     const items = sexes.map(sex => ({
@@ -28,6 +32,15 @@ const Show = (props) => {
 
     // 性別ID
     const sexId = String(athlete.sex.id);
+
+    // 削除ボタンクリック時の処理
+    const handleDelete = (athlete_id, e) => {
+        //再レンダリング防止
+        e.preventDefault();
+        console.log('削除アクションの実行');
+
+        destroy(route('athlete.destroy', athlete_id));
+    }
 
 
     return (
@@ -122,6 +135,37 @@ const Show = (props) => {
                     <HStack display='flex' justifyContent='center' gap='4' p='0.5rem' m='6'>
                         <Button as={Link} href={`/athletes`} color='white' bg='gray.500' size='lg' p='5' width='30%'>選手一覧</Button>
                         <Button as={Link} href={`/athletes/team/${athlete.team.id}`} color='white' bg='orange.500' size='lg' p='5'>【{athlete.team.team_name}】選手一覧</Button>
+                        <Dialog.Root>
+                            <Dialog.Trigger asChild>
+                                <Button variant="outline" size="md" color='white' bg='black' p='1rem'>
+                                    削除
+                                </Button>
+                            </Dialog.Trigger>
+                            <Portal>
+                                <Dialog.Backdrop />
+                                <Dialog.Positioner>
+                                    <Dialog.Content>
+                                        <Dialog.CloseTrigger asChild position="absolute" top="4" right="4">
+                                            <CloseButton size="md" position="absolute" top="4" right="4" />
+                                        </Dialog.CloseTrigger>
+                                        <Dialog.Header>
+                                            <Dialog.Title>削除前の最終確認</Dialog.Title>
+                                        </Dialog.Header>
+                                        <Dialog.Body>
+                                            <p>
+                                                この選手情報を削除しますか。
+                                            </p>
+                                        </Dialog.Body>
+                                        <Dialog.Footer>
+                                            <Dialog.ActionTrigger asChild>
+                                                <Button variant="outline">キャンセル</Button>
+                                            </Dialog.ActionTrigger>
+                                            <Button type='submit' color='white' bg='black' p='0.5rem' onClick={(e) => handleDelete(athlete, e)}>削除する</Button>
+                                        </Dialog.Footer>
+                                    </Dialog.Content>
+                                </Dialog.Positioner>
+                            </Portal>
+                        </Dialog.Root>
                     </HStack>
                 </Box>
             </Box>
