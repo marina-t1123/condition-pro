@@ -27,21 +27,19 @@ import {
   } from "../../../../src/components/ui/dialog";
 import { Field } from '../../../../src/components/ui/field';
 
-
-const Teams = ({ teams, m_events, filters = {} }) => {
-    console.log(filters);
+const Teams = ({ teams, m_events }) => {
 
     // フォーム関連が使用できるようにuseFormを設定
-    const {data, setData, get, post, errors } = useForm({
-        'team_name': filters?.team_name ||'',
-        'm_event_id': filters?.m_event_id || ''
+    const {data, setData, get, errors } = useForm({
+        'team_name': '',
+        'm_event_id': ''
     });
 
     // 検索フォームの入力データ保持
     const handleChange = (e) => {
         setData({...data, [e.target.name]: e.target.value});
-        console.log(data);
     }
+    console.log(data);
 
     // 検索フォームの送信ボタンクリック時の処理
     const handleSubmit = (e) => {

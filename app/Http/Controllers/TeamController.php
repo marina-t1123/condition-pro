@@ -20,7 +20,7 @@ class TeamController extends Controller
     public function index(SearchTeamRequest $request)
     {
         //検索情報を格納する
-        $m_event_id = $request->input('m_event_id');
+        $m_event_id = intval($request->input('m_event_id'), 10);
         $keyword = $request->input('team_name');
 
         $teams = Team::featchSerachItems($m_event_id, $keyword)->get();
@@ -30,11 +30,7 @@ class TeamController extends Controller
 
         return Inertia::render('Team/Index', [
             'teams' => $teams,
-            'm_events' => $m_events,
-            'filters' => [ //検索条件の情報を保持するためにfilterオブジェクトを作成
-                'team_name' => $keyword,
-                'm_event_id' => $m_event_id
-            ]
+            'm_events' => $m_events
         ]);
     }
 
