@@ -46,10 +46,10 @@ Route::middleware('auth')
     ->prefix('athletes')
     ->group(function () {
         Route::get('/', [AthleteController::class, 'index'])->name('athlete.index');
-        Route::get('/team/{id}', [AthleteController::class, 'showRespectiveTeam'])->name('athlete.show_respective_team');
+        Route::get('/team/{team_id}', [AthleteController::class, 'showRespectiveTeam'])->name('athlete.show_respective_team');
         Route::get('/create', [AthleteController::class, 'create'])->name('athlete.create');
         Route::post('/store', [AthleteController::class, 'store'])->name('athlete.store');
-        Route::get('/show/{id}', [AthleteController::class, 'show'])->name('athlete.show');
+        Route::get('/show/{athlete_id}/{position_id}', [AthleteController::class, 'show'])->name('athlete.show');
         Route::get('/edit/{athlete_id}/{position_id}', [AthleteController::class, 'edit'])->name('athlete.edit');
         Route::put('/edit/{athlete_id}', [AthleteController::class, 'update'])->name('athlete.update');
         Route::delete('/delete/{id}', [AthleteController::class, 'destroy'])->name('ahtlete.destroy');

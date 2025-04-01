@@ -26,6 +26,7 @@ class AthleteController extends Controller
      */
     public function index(Request $request)
     {
+        $team_id = null;
         // ↓検索機能を実装する際に、以下の内容の処理を実装する
         // 1. 検索フォームでの検索情報の値(バリデーション済み)を取得する
         $search_name = $request->input('athlete_name');
@@ -33,7 +34,7 @@ class AthleteController extends Controller
         $search_position_id = $request->input('m_event_position_id');
 
         // 2. Athleteモデルで検索情報に一致する選手情報のメソッドを作成後に、メソッドの引数で検索フォームの値を引数で渡す。
-        $athletes = Athlete::featchSearchAthlete($search_name, $search_event_id, $search_position_id)->get();
+        $athletes = Athlete::fetchSearchAthlete($team_id, $search_name, $search_event_id, $search_position_id)->get();
         // 3. 2で取得した条件に合う選手情報を、$athletesに格納する
 
         // 種目・種目に紐ずくポジションの情報を取得する
@@ -45,13 +46,64 @@ class AthleteController extends Controller
             'm_events' => $m_events
         ]);
     }
+    // /**
+    //  * 選手一覧画面
+    //  *
+    //  * @var string $search_name
+    //  * @var interger $search_event_id
+    //  * @var interger $search_position_id
+    //  */
+    // public function index(Request $request)
+    // {
+    //     // ↓検索機能を実装する際に、以下の内容の処理を実装する
+    //     // 1. 検索フォームでの検索情報の値(バリデーション済み)を取得する
+    //     $search_name = $request->input('athlete_name');
+    //     $search_event_id = $request->input('m_event_id');
+    //     $search_position_id = $request->input('m_event_position_id');
+
+    //     $team_id = null;
+
+    //     // 2. Athleteモデルで検索情報に一致する選手情報のメソッドを作成後に、メソッドの引数で検索フォームの値を引数で渡す。
+    //     $athletes = Athlete::featchSearchAthlete($team_id, $search_name, $search_event_id, $search_position_id)->get();
+    //     // 3. 2で取得した条件に合う選手情報を、$athletesに格納する
+
+    //     // 種目・種目に紐ずくポジションの情報を取得する
+    //     $m_events = MEvent::getAllMEventAndPositions()->get();
+
+    //     // リダイレクト処理
+    //     return Inertia::render('Athlete/Index', [
+    //         'athletes' => $athletes,
+    //         'm_events' => $m_events
+    //     ]);
+    // }
 
     /**
      * 各チームの選手一覧
      */
-    public function showRespectiveTeam()
+    public function showRespectiveTeam(SearchAthleteRequest $request, $team_id)
     {
+        // dd($request);
+        $team_id = intval($team_id, 10);
+        $search_name = $request->input('athlete_name');
+        $search_position_id = $request->input('m_event_position_id');
+        $search_event_id = $request->input('m_event_id');
 
+        $athletes = Athlete::fetchSearchAthlete($team_id, $search_name, $search_event_id, $search_position_id)->get();
+
+        $team = Team::with('mEvent')->findOrFail($team_id);
+        // dd($team);
+        $m_event_id = $team->mEvent->id;
+        $m_event_name = $team->mEvent->event_name;
+        $m_event_positions = $team->mEvent->mEventPositions;
+
+        // リダイレクト処理
+        return Inertia::render('Athlete/TeamIndex', [
+            'athletes' => $athletes,
+            'team' => $team,
+            'm_event_id' => $m_event_id,
+            'm_event_name' => $m_event_name,
+            'm_event_positions' => $m_event_positions
+        ]);
     }
 
     /**
@@ -108,9 +160,20 @@ class AthleteController extends Controller
     /**
      * 選手詳細画面
      */
-    public function show()
+    public function show($athlete_id, $position_id)
     {
+        // 対象のIDを持つ選手とリレーション関係のデータを取得する
+        $athlete =Athlete::with('team.mEvent', 'sex', 'mEventPositions')->findOrFail($athlete_id);
 
+        $athlete_data_array = $athlete->setAthletePositionData($athlete, $position_id);
+
+        // 性別テーブルの情報を取得
+        $sexes = Sex::all();
+
+        return Inertia::render('Athlete/Show', [
+            'athlete' => $athlete_data_array,
+            'sexes' => $sexes
+        ]);
     }
 
     /**

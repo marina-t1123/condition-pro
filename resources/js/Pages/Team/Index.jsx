@@ -150,7 +150,7 @@ const Teams = ({ teams, m_events, filters = {} }) => {
                                         </Link>
                                     </Table.Cell>
                                     <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                        <Link variant='plain' href=''>
+                                        <Link variant='plain' href={`/athletes/team/${team.id}`}>
                                             <Center>
                                                 <Image src="img/athlete.png" />
                                             </Center>
