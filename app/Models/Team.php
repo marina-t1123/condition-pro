@@ -52,6 +52,7 @@ class Team extends Model
      */
     public static function featchSerachItems($m_event_id, $keyword)
     {
+        // dd($m_event_id);
         $query = Team::query();
 
         if (!empty($m_event_id)) {

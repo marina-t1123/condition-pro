@@ -22,8 +22,8 @@ class SearchTeamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'team_name' => 'string|max:255',
-            'm_event_id' => 'integer|exists:m_events,id'
+            'team_name' => 'nullable|string|max:255',
+            'm_event_id' => 'nullable|integer|exists:m_events,id'
         ];
     }
 
