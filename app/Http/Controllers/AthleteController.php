@@ -18,108 +18,62 @@ use Inertia\Inertia;
 class AthleteController extends Controller
 {
     /**
-     * 選手一覧画面
+     * 選手一覧画面表示
+     * 検索条件に一致する選手情報を取得することも可能
      *
-     * @var string $search_name
-     * @var interger $search_event_id
-     * @var interger $search_position_id
+     * @var string $searchName
+     * @var interger $searchEventId
+     * @var interger $searchPositionId
      */
-    public function index(Request $request)
+    public function index(SearchAthleteRequest $request)
     {
-        $team_id = null;
-        // ↓検索機能を実装する際に、以下の内容の処理を実装する
-        // 1. 検索フォームでの検索情報の値(バリデーション済み)を取得する
-        $search_name = $request->input('athlete_name');
-        $search_event_id = $request->input('m_event_id');
-        $search_position_id = $request->input('m_event_position_id');
-
-        // 2. Athleteモデルで検索情報に一致する選手情報のメソッドを作成後に、メソッドの引数で検索フォームの値を引数で渡す。
-        $athletes = Athlete::fetchSearchAthlete($team_id, $search_name, $search_event_id, $search_position_id)->get();
-        // 3. 2で取得した条件に合う選手情報を、$athletesに格納する
-
-        // 種目・種目に紐ずくポジションの情報を取得する
-        $m_events = MEvent::getAllMEventAndPositions()->get();
+        $teamId = null;
+        $athleteData = Athlete::fetchAthleteData($request, $teamId);
 
         // リダイレクト処理
         return Inertia::render('Athlete/Index', [
-            'athletes' => $athletes,
-            'm_events' => $m_events
+            'athletes' => $athleteData['athletes'],
+            'm_events' => $athleteData['m_events']
         ]);
     }
-    // /**
-    //  * 選手一覧画面
-    //  *
-    //  * @var string $search_name
-    //  * @var interger $search_event_id
-    //  * @var interger $search_position_id
-    //  */
-    // public function index(Request $request)
-    // {
-    //     // ↓検索機能を実装する際に、以下の内容の処理を実装する
-    //     // 1. 検索フォームでの検索情報の値(バリデーション済み)を取得する
-    //     $search_name = $request->input('athlete_name');
-    //     $search_event_id = $request->input('m_event_id');
-    //     $search_position_id = $request->input('m_event_position_id');
-
-    //     $team_id = null;
-
-    //     // 2. Athleteモデルで検索情報に一致する選手情報のメソッドを作成後に、メソッドの引数で検索フォームの値を引数で渡す。
-    //     $athletes = Athlete::featchSearchAthlete($team_id, $search_name, $search_event_id, $search_position_id)->get();
-    //     // 3. 2で取得した条件に合う選手情報を、$athletesに格納する
-
-    //     // 種目・種目に紐ずくポジションの情報を取得する
-    //     $m_events = MEvent::getAllMEventAndPositions()->get();
-
-    //     // リダイレクト処理
-    //     return Inertia::render('Athlete/Index', [
-    //         'athletes' => $athletes,
-    //         'm_events' => $m_events
-    //     ]);
-    // }
 
     /**
      * 各チームの選手一覧
+     *
+     *  @param \App\Http\Requests\SearchAthleteRequest $request
+     *  @param int $teamId
+     *  @return \Inertia\Responce
      */
-    public function showRespectiveTeam(SearchAthleteRequest $request, $team_id)
+    public function showRespectiveTeam(SearchAthleteRequest $request, $teamId)
     {
-        // dd($request);
-        $team_id = intval($team_id, 10);
-        $search_name = $request->input('athlete_name');
-        $search_position_id = $request->input('m_event_position_id');
-        $search_event_id = $request->input('m_event_id');
-
-        $athletes = Athlete::fetchSearchAthlete($team_id, $search_name, $search_event_id, $search_position_id)->get();
-
-        $team = Team::with('mEvent')->findOrFail($team_id);
-        // dd($team);
-        $m_event_id = $team->mEvent->id;
-        $m_event_name = $team->mEvent->event_name;
-        $m_event_positions = $team->mEvent->mEventPositions;
+        $athleteData = Athlete::fetchAthleteData($request, $teamId);
 
         // リダイレクト処理
         return Inertia::render('Athlete/TeamIndex', [
-            'athletes' => $athletes,
-            'team' => $team,
-            'm_event_id' => $m_event_id,
-            'm_event_name' => $m_event_name,
-            'm_event_positions' => $m_event_positions
+            'athletes' => $athleteData['athletes'],
+            'team' => $athleteData['team'],
+            'm_event_id' => $athleteData['m_event_id'],
+            'm_event_name' => $athleteData['m_event_name'],
+            'm_event_positions' => $athleteData['m_event_positions']
         ]);
     }
 
     /**
      * 選手登録画面
+     *
+     * @return \Inertia\Responce
      */
     public function create()
     {
         // 登録されているチーム情報とそのチームに紐づく種目・ポジションを一緒に取得
-        $team_event_positions = Team::with('mEvent.mEventPositions')->get();
+        $teamEventPositions = Team::with('mEvent.mEventPositions')->get();
 
         // 性別テーブルの情報を取得
         $sexes = Sex::all();
 
         // リダイレクト処理
         return Inertia::render('Athlete/Create', [
-            'team_event_positions' => $team_event_positions,
+            'team_event_positions' => $teamEventPositions,
             'sexes' => $sexes
         ]);
     }
@@ -136,9 +90,9 @@ class AthleteController extends Controller
         $storeAthleteRequest->validated();
 
         // 選手を新規作成
-        $athlete = DB::transaction(function() use($storeAthleteRequest) {
+        $athlete = DB::transaction(function () use ($storeAthleteRequest) {
             $athlete = Athlete::create([
-                'team_id' => $storeAthleteRequest->team_id,
+                'team_id' => intval($storeAthleteRequest->team_id, 10),
                 'sex_id' => $storeAthleteRequest->sex_id,
                 'name' => $storeAthleteRequest->athlete_name,
                 'birthday' => $storeAthleteRequest->birthday,
@@ -150,28 +104,31 @@ class AthleteController extends Controller
             $athlete->mEventPositions()->syncWithoutDetaching($pivotPlayerPositionData);
 
             return $athlete;
-
         });
 
         // リダイレクト時に新規登録メッセージを表示する
-        return to_route('athlete.index')->with('message', '【'. $athlete->name . '】の選手情報を更新しました。');
+        return to_route('athlete.index')->with('message', '【'.$athlete->name.'】の選手情報を更新しました。');
     }
 
     /**
      * 選手詳細画面
+     *
+     * @param int $athleteId
+     * @param int $positionId
+     * @return \Inertia\Response
      */
-    public function show($athlete_id, $position_id)
+    public function show($athleteId, $positionId)
     {
         // 対象のIDを持つ選手とリレーション関係のデータを取得する
-        $athlete =Athlete::with('team.mEvent', 'sex', 'mEventPositions')->findOrFail($athlete_id);
+        $athlete = Athlete::with('team.mEvent', 'sex', 'mEventPositions')->findOrFail($athleteId);
 
-        $athlete_data_array = $athlete->setAthletePositionData($athlete, $position_id);
+        $athleteDataArray = $athlete->setAthletePositionData($athlete, $positionId);
 
         // 性別テーブルの情報を取得
         $sexes = Sex::all();
 
         return Inertia::render('Athlete/Show', [
-            'athlete' => $athlete_data_array,
+            'athlete' => $athleteDataArray,
             'sexes' => $sexes
         ]);
     }
@@ -179,31 +136,36 @@ class AthleteController extends Controller
     /**
      * 選手編集画面
      *
-     * @var array $athlete_data_array
+     * @param int $athleteId
+     * @param int $positionId
+     * @var array $athleteDataArray
+     * @return \Inertia\Responce
      */
-    public function edit($athlete_id, $position_id)
+    public function edit($athleteId, $positionId)
     {
         // 対象のIDを持つ選手とリレーション関係のデータを取得する
-        $athlete =Athlete::with('team.mEvent', 'sex', 'mEventPositions')->findOrFail($athlete_id);
+        $athlete = Athlete::with('team.mEvent', 'sex', 'mEventPositions')->findOrFail($athleteId);
 
-        $athlete_data_array= $athlete->setAthletePositionData($athlete, $position_id);
+        $athleteDataArray = $athlete->setAthletePositionData($athlete, $positionId);
 
         // 登録されているチームに紐づく種目・ポジションを取得する
-        $team_event_positions = MEventPosition::where('m_event_id', '=', $athlete->team->m_event_id)->get();
+        $teamEventPositions = MEventPosition::where('m_event_id', '=', $athlete->team->m_event_id)->get();
 
         // 性別テーブルの情報を取得
         $sexes = Sex::all();
 
         return Inertia::render('Athlete/Edit', [
-            'athlete' => $athlete_data_array,
-            'team_event_positions' => $team_event_positions,
+            'athlete' => $athleteDataArray,
+            'team_event_positions' => $teamEventPositions,
             'sexes' => $sexes
         ]);
-
     }
 
     /**
-     * 選手編集
+     * 選手更新
+     *
+     * @param \App\Http\Requests\UpdateAthleteRequest $updateAthleteRequest
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateAthleteRequest $updateAthleteRequest)
     {
@@ -215,7 +177,7 @@ class AthleteController extends Controller
         $update_m_event_position_id = intval($updateAthleteRequest['m_event_position_id']);
 
 
-        DB::transaction(function() use($setAthlete, $updateAthleteRequest, $setPlayerPosition, $update_m_event_position_id){
+        DB::transaction(function () use ($setAthlete, $updateAthleteRequest, $setPlayerPosition, $update_m_event_position_id) {
 
             // 選手情報更新
             $setAthlete->update([
@@ -234,15 +196,34 @@ class AthleteController extends Controller
         });
 
         // リダイレクト時に編集メッセージを表示する
-        return to_route('athlete.index')->with('message', '【'. $setAthlete->name . '】の選手情報を編集しました。');
+        return to_route('athlete.index')->with('message', '【' . $setAthlete->name . '】の選手情報を編集しました。');
     }
 
     /**
      * 選手削除
+     *
+     * @param string $athleteId
+     * @return \Illuminate\Http\RedirectResponce
      */
-    public function destroy()
+    public function destroy($athleteId)
     {
+        $featchDeleteData = Athlete::getInfoNecessaryDeleting($athleteId);
 
+        DB::transaction(function () use ($featchDeleteData) {
+
+            $athlete = $featchDeleteData['delete_athlete'];
+            $positions = $featchDeleteData['positions'];
+
+            foreach ($positions as $position) {
+                DB::table('player_positions')
+                    ->where('athlete_id', $athlete->id)
+                    ->where('m_event_position_id', $position->id)
+                    ->delete();
+            };
+
+            $athlete->delete();
+        });
+
+        return to_route('athlete.index')->with('message', '【' . $featchDeleteData['athlete_name'] . '】の選手情報・関連登録情報を削除しました。');
     }
-
 }

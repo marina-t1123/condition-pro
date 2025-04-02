@@ -20,7 +20,6 @@ import {
 
 
 const Show = ({ team, m_event }) => {
-    // console.log(team);
     // 編集フォームへの遷移時の処理
     const { delete:destroy } = useForm();
 
@@ -30,8 +29,6 @@ const Show = ({ team, m_event }) => {
         e.preventDefault();
         console.log('削除実施');
 
-        //delete
-        // destroy(`/teams/delete/${team_id}`);
         destroy(route('team.destroy', team_id));
     }
 
