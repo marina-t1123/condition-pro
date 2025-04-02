@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\MEventController;
 use App\Http\Controllers\MEventPositionController;
+use App\Http\Controllers\MBodyPartController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -83,5 +84,12 @@ Route::middleware('auth')
         Route::put('/edit/{id}', [MEventPositionController::class, 'update'])->name('m_event_position.update');
         Route::delete('/delete/{id}', [MEventPositionController::class, 'destroy'])->name('m_event_position.destroy');
 });
+
+// 部位マスタ
+Route::middleware('auth')
+    ->prefix('m_body_parts')
+    ->group(function() {
+        Route::get('/', [MBodyPartController::class, 'index'])->name('m_body_part.index');
+    });
 
 require __DIR__.'/auth.php';
