@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\MEventPosition;
-use App\Models\MEvent;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,7 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
         User::factory()->create([
             'name' => 'Test User',
@@ -30,6 +27,7 @@ class DatabaseSeeder extends Seeder
             SexSeeder::class,
             AthleteSeeder::class,
             PlayerPositionSeeder::class,
+            MBodyPartSeeder::class,
         ]);
     }
 }
