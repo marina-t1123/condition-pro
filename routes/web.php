@@ -99,7 +99,9 @@ Route::middleware('auth')
     ->group(function() {
         Route::get('/', [MInjuryNameController::class, 'index'])->name('m_injury_name.index');
         Route::get('/create', [MInjuryNameController::class, 'create'])->name('m_injury_name.create');
-        Route::post('/store', [MInjuryNameController::class, 'store'])->name('m_injury_name.edit');
+        Route::post('/store', [MInjuryNameController::class, 'store'])->name('m_injury_name.store');
+        Route::get('/edit/{id}', [MInjuryNameController::class, 'edit'])->name('m_injury_name.edit');
+        Route::put('/edit/{id}', [MInjuryNameController::class, 'update'])->name('m_injury_name.update');
     }
 );
 

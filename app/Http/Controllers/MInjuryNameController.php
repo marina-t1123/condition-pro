@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMInjuryNameRequest;
+use App\Http\Requests\UpdateMInjuryNameRequest;
 use App\Models\MInjuryName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +45,34 @@ class MInjuryNameController extends Controller
         $createMInjuryName = MInjuryName::create($validated);
 
         return to_route('m_injury_name.index')->with('message', '【'.$createMInjuryName->injury_name.'】の傷病名マスタを作成しました。');
+    }
+
+    /**
+     * 傷病名マスタ編集
+     *
+     * @return \Inertia\Responce
+     */
+    public function edit($injuryNameId)
+    {
+        $mInjuryName = MInjuryName::findOrFail($injuryNameId);
+        return Inertia::render('MInjuryName/Edit', [
+            'm_injury_name' => $mInjuryName
+        ]);
+    }
+
+    /**
+     * 傷病名マスタ更新
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(UpdateMInjuryNameRequest $request,$injuryNameId)
+    {
+        $validated = $request->validated();
+        $mInjuryName = MInjuryName::findOrFail($injuryNameId);
+
+        $mInjuryName->update($validated);
+
+        return to_route('m_injury_name.index')->with('message', '【'.$mInjuryName->injury_name.'】 を更新しました。');
     }
 
 }
