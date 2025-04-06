@@ -20,4 +20,21 @@ class MInjuryName extends Model
         return $mInjuryNames = MInjuryName::all();
     }
 
+    /**
+     * 条件に合う傷病名を取得
+     */
+    public static function retrieveMInjuryNames($searchName)
+    {
+        // 傷病名のクエリビルダを設定
+        $query = MInjuryName::query();
+
+        if(!empty($searchName)){
+            $query->where('injury_name', 'LIKE', '%'.$searchName.'%');
+        }
+
+        $searchInjuryNames = $query;
+
+        return $searchInjuryNames;
+    }
+
 }

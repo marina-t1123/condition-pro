@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreMInjuryNameRequest;
 use App\Http\Requests\UpdateMInjuryNameRequest;
+use App\Http\Requests\SearchMInjuryNameRequest;
 use App\Models\MInjuryName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,10 +17,13 @@ class MInjuryNameController extends Controller
      *
      * @return \Inertia\Responce
      */
-    public function index()
+    public function index(SearchMInjuryNameRequest $request)
     {
+        $searchInjuryNames = MInjuryName::retrieveMInjuryNames($request->injury_name);
+        $mInjuryNames = $searchInjuryNames->get();
+
         return Inertia::render('MInjuryName/Index', [
-            'm_injury_names' =>  MInjuryName::getAllInjuryName()
+            'm_injury_names' => $mInjuryNames
         ]);
     }
 
