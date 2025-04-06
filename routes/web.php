@@ -6,6 +6,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\MEventController;
 use App\Http\Controllers\MEventPositionController;
 use App\Http\Controllers\MBodyPartController;
+use App\Http\Controllers\MInjuryNameController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -91,5 +92,15 @@ Route::middleware('auth')
     ->group(function() {
         Route::get('/', [MBodyPartController::class, 'index'])->name('m_body_part.index');
     });
+
+// 傷病名マスタ
+Route::middleware('auth')
+    ->prefix('m_injury_names')
+    ->group(function() {
+        Route::get('/', [MInjuryNameController::class, 'index'])->name('m_injury_name.index');
+        Route::get('/create', [MInjuryNameController::class, 'create'])->name('m_injury_name.create');
+        Route::post('/store', [MInjuryNameController::class, 'store'])->name('m_injury_name.edit');
+    }
+);
 
 require __DIR__.'/auth.php';

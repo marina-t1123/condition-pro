@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             AthleteSeeder::class,
             PlayerPositionSeeder::class,
             MBodyPartSeeder::class,
+            MInjuryNameSeeder::class,
         ]);
     }
 }
