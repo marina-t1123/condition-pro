@@ -12,26 +12,22 @@ import {
     Stack,
 } from '@chakra-ui/react';
 
-const Edit = ({m_event}) => {
+const Edit = ({m_injury_name}) => {
     // Inertiaのformヘルパー関数(useForm)を使用して、送信内容の状態を管理
     const {data, setData, put, errors} = useForm({
-        event_name: m_event?.event_name || '',
+        injury_name: m_injury_name?.injury_name || '',
     });
 
     // 入力フォームで入力があった際の処理
     const handleChange = (e) => {
-        console.log('cahneイベント発火');
-
         setData({...data, [e.target.name]: e.target.value });
         console.log(data);
     }
 
     // 送信ボタンが押された際の処理
     const handleSubmit = (e) => {
-        console.log('送信成功');
         e.preventDefault();
-
-        put(`/m_events/edit/${m_event.id}`, data);
+        put(`/m_injury_names/edit/${m_injury_name.id}`, data);
     }
 
     // 実際のコンポーネント
@@ -43,25 +39,25 @@ const Edit = ({m_event}) => {
             {/* メイン */}
             <Box className="main" width="80%" m="auto" bg='white' marginTop="20px" p="6" boxShadow='md'>
                 <Box textAlign="center" mb="6">
-                    <Text fontSize="25px" mb="2">種目マスタ編集フォーム</Text>
-                    <Text>対象の種目マスタの種目名を更新します。</Text>
+                    <Text fontSize="25px" mb="2">傷病名マスタ編集フォーム</Text>
+                    <Text>対象の傷病名マスタを更新します。</Text>
                 </Box>
 
                 <form onSubmit={handleSubmit}>
                     <Stack gap="4" w="full">
-                        <Text>種目名</Text>
+                        <Text>傷病名</Text>
                         <Input
                             placeholder="必須入力です"
                             type="text"
-                            id="event_name"
-                            name='event_name'
-                            value={data.event_name}
+                            id="injury_name"
+                            name='injury_name'
+                            value={data.injury_name}
                             onChange={handleChange}
                         />
-                        <Text color="red.500">{errors.event_name}</Text>
+                        <Text color="red.500">{errors.injury_name}</Text>
                     </Stack>
                     <HStack display="flex" justifyContent="center" gap="4" p="0.5rem" m="6">
-                        <Button as={Link} href={`/m_events`} color="white" bg="gray.500" size="lg" p="5" width='30%'>戻る</Button>
+                        <Button as={Link} href={`/m_injury_names`} color="white" bg="gray.500" size="lg" p="5" width='30%'>戻る</Button>
                         <Button type='submit' color='white' bg="orange.500" size="lg" p="5" width="30%">更新</Button>
                     </HStack>
                 </form>
