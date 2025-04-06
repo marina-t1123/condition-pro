@@ -75,7 +75,7 @@ export const Header = () => {
                                 </MenuItem>
                                 <MenuItem asChild value="m_injury_name">
                                     <a
-                                        href=""
+                                        href="/m_injury_names"
                                         target="_blank"
                                         rel="noreferrer"
                                     >
