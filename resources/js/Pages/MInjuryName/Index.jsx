@@ -54,14 +54,12 @@ const MEvents = ({m_injury_names}) => {
     }
 
     // 削除イベント処理
-    // const handleDelete = (id, e) => {
-    //     console.log('削除処理');
-    //     console.log(id);
-    //     // 再レンダリング防止
-    //     e.preventDefault();
+    const handleDelete = (id, e) => {
+        // 再レンダリング防止
+        e.preventDefault();
 
-    //     destroy(route('m_injury_name.destroy', id));
-    // }
+        destroy(route('m_injury_name.destroy', id));
+    }
 
     return (
         <ChakraProvider value={defaultSystem}>
