@@ -8,8 +8,6 @@ class MInjuryName extends Model
 {
     protected $fillable = ['injury_name'];
 
-
-
     // relasion
 
     /**

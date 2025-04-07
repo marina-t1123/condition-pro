@@ -102,6 +102,7 @@ Route::middleware('auth')
         Route::post('/store', [MInjuryNameController::class, 'store'])->name('m_injury_name.store');
         Route::get('/edit/{id}', [MInjuryNameController::class, 'edit'])->name('m_injury_name.edit');
         Route::put('/edit/{id}', [MInjuryNameController::class, 'update'])->name('m_injury_name.update');
+        Route::delete('/delete/{id}', [MInjuryNameController::class, 'destroy'])->name('m_injury_name.destroy');
     }
 );
 

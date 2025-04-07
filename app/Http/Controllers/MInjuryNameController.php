@@ -79,4 +79,22 @@ class MInjuryNameController extends Controller
         return to_route('m_injury_name.index')->with('message', '【'.$mInjuryName->injury_name.'】 を更新しました。');
     }
 
+    /**
+     * 傷病名マスタ削除
+     *
+     * 傷病情報機能を実装した際に、作成された傷病情報に傷病名マスタが使用されている場合は、削除できないようにする処理を実装する必要あり。
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy($injuryNameId)
+    {
+        $mInjuryName = MInjuryName::findOrFail($injuryNameId);
+
+        $deleteInjuryName = $mInjuryName->injury_name;
+
+        $mInjuryName->delete();
+
+        return to_route('m_injury_name.index')->with('message', '【'.$deleteInjuryName.'】を削除しました。');
+    }
+
 }
