@@ -34,7 +34,7 @@ class SearchMHospitalRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'hoslital_name' => '病院名',
+            'hospital_name' => '病院名',
         ];
     }
 }
