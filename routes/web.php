@@ -6,6 +6,7 @@ use App\Http\Controllers\TeamController;
 use App\Http\Controllers\MEventController;
 use App\Http\Controllers\MEventPositionController;
 use App\Http\Controllers\MBodyPartController;
+use App\Http\Controllers\MHospitalController;
 use App\Http\Controllers\MInjuryNameController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -103,6 +104,16 @@ Route::middleware('auth')
         Route::get('/edit/{id}', [MInjuryNameController::class, 'edit'])->name('m_injury_name.edit');
         Route::put('/edit/{id}', [MInjuryNameController::class, 'update'])->name('m_injury_name.update');
         Route::delete('/delete/{id}', [MInjuryNameController::class, 'destroy'])->name('m_injury_name.destroy');
+    }
+);
+
+// 病院名マスタ
+Route::middleware('auth')
+    ->prefix('m_hospitals')
+    ->group(function() {
+        Route::get('/', [MHospitalController::class, 'index'])->name('m_hospital.index');
+        Route::get('/create', [MHospitalController::class, 'create'])->name('m_hospital.create');
+        Route::post('/store', [MHospitalController::class, 'store'])->name('m_hospital.store');
     }
 );
 

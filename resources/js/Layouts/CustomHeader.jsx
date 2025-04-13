@@ -82,6 +82,15 @@ export const Header = () => {
                                         傷病名
                                     </a>
                                 </MenuItem>
+                                <MenuItem asChild value="m_hospital">
+                                    <a
+                                        href="/m_hospitals"
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        病院名
+                                    </a>
+                                </MenuItem>
                             </MenuContent>
                         </MenuRoot>
                     </HStack>
