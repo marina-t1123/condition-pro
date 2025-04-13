@@ -110,10 +110,10 @@ const Index = ({ m_hospitals }) => {
                         </DialogRoot>
 
                         {/* リセットボタン */}
-                        <Button as={Link} href={`/m_hospital_names`} color='white' bg='gray.500' p='5'>リセット</Button>
+                        <Button as={Link} href={`/m_hospitals`} color='white' bg='gray.500' p='5'>リセット</Button>
 
                         {/* 登録フォーム */}
-                        <Button as={Link} href={`/m_hospital_names/create`} bg='orange.400' p="0.5rem">
+                        <Button as={Link} href={`/m_hospitals/create`} bg='orange.400' p="0.5rem">
                             病院名マスタ登録
                         </Button>
 
@@ -131,25 +131,6 @@ const Index = ({ m_hospitals }) => {
                             </Table.Header>
 
                             <Table.Body>
-                                {/* {m_hospitals.map((m_hospital, index) => (
-                                    <Table.Row key={index}>
-                                        <Table.Cell textAlign='center'  borderBottom="1px solid" borderColor="gray.300">{m_hospital.hospital_name}</Table.Cell>
-                                        <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                            <Link variant='plain' href={`/m_hospitals/edit/${m_hospital.id}`}>
-                                                <Center>
-                                                    <Image src="img/edit.png" />
-                                                </Center>
-                                            </Link>
-                                        </Table.Cell>
-                                        <Table.Cell  borderBottom="1px solid" borderColor="gray.300">
-                                                <Center>
-                                                    <Button onClick={ (e) => handleDelete(m_hospital.id, e) }>
-                                                        <Image src="img/delete.png" />
-                                                    </Button>
-                                                </Center>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                ))} */}
                                 {/* 三項演算子の条件文 病院マスタオブジェクトがtrueの場合 & m_hospitals（コレクション）をArray判定してtrueの場合 ＆ コレクション内にオブジェクトが存在している場合　*/}
                                 {/* trueの場合 */}
                                 {m_hospitals && Array.isArray(m_hospitals) && m_hospitals.length > 0 ? (
@@ -190,7 +171,6 @@ const Index = ({ m_hospitals }) => {
                     </Table.ScrollArea>
 
                 </Box>
-　　　　　　
             </>
         </ChakraProvider>
     );
