@@ -22,7 +22,7 @@ class StoreMHospitalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'hospital_name' => 'required|string|max:255'
+            'hospital_name' => 'required|string|max:255|unique:m_hospitals'
         ];
     }
 

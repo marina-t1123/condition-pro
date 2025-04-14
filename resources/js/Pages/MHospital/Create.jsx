@@ -36,7 +36,7 @@ const Create = () => {
         e.preventDefault();
 
         // Inertia.jsのrouterオブジェクトのpostメソッドを使用して、Laravelのルーティング(web.phpで該当するURI)に対して、フォームで入力された値(state)を渡して、Laravel側でのstoreアクションを実行する
-        post('/m_hospital_names/store', data);
+        post('/m_hospitals/store', data);
     }
 
     return (
