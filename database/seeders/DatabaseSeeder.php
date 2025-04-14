@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             PlayerPositionSeeder::class,
             MBodyPartSeeder::class,
             MInjuryNameSeeder::class,
+            MHospitalSeeder::class,
         ]);
     }
 }
