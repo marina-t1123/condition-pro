@@ -116,6 +116,7 @@ Route::middleware('auth')
         Route::post('/store', [MHospitalController::class, 'store'])->name('m_hospital.store');
         Route::get('/edit/{id}', [MHospitalController::class, 'edit'])->name('m_hospital.edit;');
         Route::put('/edit/{id}', [MHospitalController::class, 'update'])->name('m_hospital.update');
+        Route::delete('/delete/{id}', [MHospitalController::class, 'destroy'])->name('m_hospital.destroy');
     }
 );
 

@@ -58,11 +58,12 @@ class MHospitalController extends Controller
     /**
      * 病院マスタ編集画面
      *
+     * @param int $mHospitalId
      * @return \Inertia\Responce
      */
     public function edit($mHospitalId) {
         return Inertia::render('MHospital/Edit', [
-            'm_hospital' => MHospital::findOrFail($mHospitalId)
+            'm_hospital' => MHospital::getHospitalSpecifiedId($mHospitalId)
         ]);
     }
 
@@ -74,12 +75,27 @@ class MHospitalController extends Controller
      * @return \Illuminate\Http\RedirectResponce
      */
     public function update(UpdateMHospitalRequest $request, $mHospitalId) {
-        $updateMHospital = MHospital::findOrFail($mHospitalId);
+        $updateMHospital = MHospital::getHospitalSpecifiedId($mHospitalId);
 
         $updateMHospital->update([
             'hospital_name' => $request->input('hospital_name')
         ]);
 
         return to_route('m_hospital.index')->with('message', '【'.$updateMHospital->hospital_name.'】に更新しました。');
+    }
+
+    /**
+     *  病院マスタ削除
+     *
+     * @param int $mHospitalId
+     * @return \Illuminate\Http\RedirectResponce
+     */
+    public function destroy($mHospitalId) {
+        $deleteHospital = MHospital::getHospitalSpecifiedId($mHospitalId);
+        $deleteHospitalName = $deleteHospital->hospital_name;
+
+        $deleteHospital->delete();
+
+        return to_route('m_hospital.index')->with('message', '【'.$deleteHospitalName.'】を削除しました。');
     }
 }

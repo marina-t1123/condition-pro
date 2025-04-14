@@ -60,7 +60,7 @@ const Index = ({ m_hospitals }) => {
         // 再レンダリング防止
         e.preventDefault();
 
-        // destroy(route('m_hospital.destroy', id));
+        destroy(route('m_hospital.destroy', id));
     }
 
     return (

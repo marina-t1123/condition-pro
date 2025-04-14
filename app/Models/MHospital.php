@@ -11,7 +11,20 @@ class MHospital extends Model
     // relations
 
     /**
-     * 一覧で病院名マスタを検索
+     * 指定されたIDを持つ病院マスタを取得する
+     *
+     * @param int $id
+     */
+    public static function getHospitalSpecifiedId($id)
+    {
+        $getHospital = MHospital::findOrFail($id);
+
+        return $getHospital;
+    }
+
+
+    /**
+     * 検索条件に合う病院マスタを取得する
      *
      */
     public static function retrieveHospitals($searchKeyword)
@@ -28,6 +41,6 @@ class MHospital extends Model
         }
 
         return $query->get();
-
     }
+
 }
