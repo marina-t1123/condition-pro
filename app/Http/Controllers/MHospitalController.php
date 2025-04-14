@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SearchMHospitalRequest;
 use App\Http\Requests\StoreMHospitalRequest;
+use App\Http\Requests\UpdateMHospitalRequest;
 use App\Models\MHospital;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,9 +42,6 @@ class MHospitalController extends Controller
      */
     public function store(StoreMHospitalRequest $storeMHospitalRequest)
     {
-        // バリデーション後の値を取得
-        // $storeMHospitalRequest->validated();
-
         // トランザクションを設定して、リクエストパラメータを使用して病院マスタの新規登録を実施する
         $mHospital = DB::transaction(function () use ($storeMHospitalRequest) {
             $mHospital = MHospital::create([
@@ -55,7 +53,33 @@ class MHospitalController extends Controller
 
         // リダイレクト時に新規登録メッセージを表示
         return to_route('m_hospital.index')->with('message', '【'.$mHospital->hospital_name.'】の病院マスタを登録しました。');
+    }
 
+    /**
+     * 病院マスタ編集画面
+     *
+     * @return \Inertia\Responce
+     */
+    public function edit($mHospitalId) {
+        return Inertia::render('MHospital/Edit', [
+            'm_hospital' => MHospital::findOrFail($mHospitalId)
+        ]);
+    }
 
+    /**
+     * 病院マスタ更新
+     *
+     * @param App\Http\Requests\UpdateMHospitalRequest
+     * @param int $mHospitalId
+     * @return \Illuminate\Http\RedirectResponce
+     */
+    public function update(UpdateMHospitalRequest $request, $mHospitalId) {
+        $updateMHospital = MHospital::findOrFail($mHospitalId);
+
+        $updateMHospital->update([
+            'hospital_name' => $request->input('hospital_name')
+        ]);
+
+        return to_route('m_hospital.index')->with('message', '【'.$updateMHospital->hospital_name.'】に更新しました。');
     }
 }

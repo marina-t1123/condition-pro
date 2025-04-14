@@ -114,6 +114,8 @@ Route::middleware('auth')
         Route::get('/', [MHospitalController::class, 'index'])->name('m_hospital.index');
         Route::get('/create', [MHospitalController::class, 'create'])->name('m_hospital.create');
         Route::post('/store', [MHospitalController::class, 'store'])->name('m_hospital.store');
+        Route::get('/edit/{id}', [MHospitalController::class, 'edit'])->name('m_hospital.edit;');
+        Route::put('/edit/{id}', [MHospitalController::class, 'update'])->name('m_hospital.update');
     }
 );
 
